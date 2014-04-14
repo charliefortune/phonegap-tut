@@ -1,24 +1,24 @@
 var MemoryStore = function(successCallback, errorCallback) {
 
     this.findByName = function(searchKey, callback) {
-        var employees = this.employees.filter(function(element) {
+        var players = this.players.filter(function(element) {
             var fullName = element.firstName + " " + element.lastName;
             return fullName.toLowerCase().indexOf(searchKey.toLowerCase()) > -1;
         });
-        callLater(callback, employees);
+        callLater(callback, players);
     }
 
     this.findById = function(id, callback) {
-        var employees = this.employees;
-        var employee = null;
+        var players = this.players;
+        var player = null;
         var l = employees.length;
         for (var i=0; i < l; i++) {
-            if (employees[i].id === id) {
-                employee = employees[i];
+            if (players[i].id === id) {
+                player = players[i];
                 break;
             }
         }
-        callLater(callback, employee);
+        callLater(callback, player);
     }
 
     // Used to simulate async calls. This is done to provide a consistent interface with stores (like WebSqlStore)
@@ -31,7 +31,7 @@ var MemoryStore = function(successCallback, errorCallback) {
         }
     }
 
-    this.employees = [
+    this.players = [
             {"id": 1, "firstName": "Steven", "lastName": "Gerrard", "postion":"Midfield", "managerId": 0, "city":"New York, NY", "cellPhone":"212-999-8888", "officePhone":"212-999-8887", "email":"ryan@dundermifflin.com"},
             {"id": 2, "firstName": "Raheem", "lastName": "Sterling", "position":"Midfield", "managerId": 1, "city":"Scranton, PA", "cellPhone":"570-865-2536", "officePhone":"570-123-4567", "email":"michael@dundermifflin.com"},
             {"id": 3, "firstName": "Luis", "lastName": "Suarez", "position":"Striker", "managerId": 2, "city":"Scranton, PA", "cellPhone":"570-865-1158", "officePhone":"570-843-8963", "email":"dwight@dundermifflin.com"},
