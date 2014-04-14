@@ -12,8 +12,8 @@ var app = {
 	//            }
 	//        });
 	var self = this;
-	this.store.findByName($('.search-key').val(), function(employees) {
-	    $('.employee-list').html(self.employeeLiTpl(employees));
+	this.store.findByName($('.search-key').val(), function(players) {
+	    $('.player-list').html(self.playerLiTpl(players));
 	});
     },
 
@@ -25,7 +25,7 @@ var app = {
     initialise: function() {
 	var self = this;
 	this.homeTpl = Handlebars.compile($("#home-tpl").html());
-	this.employeeLiTpl = Handlebars.compile($("#employee-li-tpl").html());
+	this.playerLiTpl = Handlebars.compile($("#player-li-tpl").html());
 	this.store = new MemoryStore(function() {
 	    self.renderHomeView();
 	    self.showAlert('Store Initialised', 'Info');
