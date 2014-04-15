@@ -54,10 +54,6 @@ var app = {
 	    $('body').html(new HomeView(this.store).render().el);
 	    return;
 	}
-	else if(hash == "#send"){
-	    console.log(hash);
-	    this.showAlert("Send a present to player", 'Route');
-	}
 	else{
 	    var match = hash.match(app.detailsURL);
 	    if (match) {

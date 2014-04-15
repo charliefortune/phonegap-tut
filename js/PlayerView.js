@@ -2,6 +2,10 @@ var PlayerView = function(player) {
  
     this.initialise = function() {
 	this.el = $('<div/>');
+	var self = this;
+	$("body").on('click','.send-present',function(){
+	    app.showAlert('Sending a present to ' + player.firstName,"Jeremy-Deals!");
+	})
     };
     
     this.render = function() {
