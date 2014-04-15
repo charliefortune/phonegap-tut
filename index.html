@@ -1,37 +1,79 @@
 <html>
-<body>
-<<<<<<< HEAD
-<script id="header-banner-tpl" type="text/x-handlebars-template">
-	<div class="header-banner">
+    <head>
+	<script src="css/source-sans-pro.js"></script>
+	<link href="css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+
+	<!---------- Banner view --------->
+	
+	<script id="header-banner-tpl" type="text/x-handlebars-template">
+	    <div class="header-banner">
 		<img src="/img/logo.jpg" height="200px"/>
+	    </div>
+	</script>
+
+	<!---------- Home view --------->
+	
+	<script id="home-tpl" type="text/x-handlebars-template">
+	    <div class='header'>
+		<h1>Home</h1>
+	    </div>
+	    <div class='search-bar'>
+		<input class='search-key' type="search"/>
+	    </div>
+	    <a href="" class="find-contact-btn">Find Contact</a>
+	    <!--	    <div class="scroll">-->
+	    <ul class='player-list'></ul>
+	    <!--	    </div>-->
+	</script>
+
+	<!---------- Playerlist view --------->
+	
+	<script id="player-li-tpl" type="text/x-handlebars-template">
+	    {{#.}}
+	<li>
+	    <a href="#players/{{this.id}}">
+		{{this.firstName}} {{this.lastName}}<br/>{{this.position}}
+	    </a>
+	</li>
+	{{/.}}
+    </script>
+
+    <!---------- Player view --------->
+    
+    <script id="player-tpl" type="text/x-handlebars-template">
+	<div class='header'>
+	    <a href='#' class="button header-button header-button-left">Back</a>
+	    <h1>Details</h1>
 	</div>
-</script>
+	<div class='details'>
+	    <img class='player-image' src='img/{{firstName}}_{{lastName}}.jpg' />
+	    <h1>{{firstName}} {{lastName}}</h1>
+	    <h2>{{title}}</h2>
+	    <span class="location"></span>
+	    <ul>
+		<li>
+		    <a href="tel:{{officePhone}}">Call Office<br/>{{officePhone}}</a>
+		</li>
+		<li>
+		    <a href="tel:{{cellPhone}}">Call Cell<br/>{{cellPhone}}</a>
+		</li>
+		<li>
+		    <a href="sms:{{cellPhone}}">SMS<br/>{{cellPhone}}</a>
+		</li>
+	    </ul>
+	    <a href='#send' class="button">Send Present</a>
+	</div>
+	
+    </script>
 
-=======
->>>>>>> 3e0721acdf0a2bfeae59b7e9f227a5b99a97735c
-<script id="home-tpl" type="text/x-handlebars-template">
-    <div class='header'><h1>Home</h1></div>
-    <div class='search-bar'><input class='search-key' type="text"/></div>
-    <ul class='player-list'></ul>
-</script>
-
-<script id="player-li-tpl" type="text/x-handlebars-template">
-    {{#.}}
-    <li><a href="#players/{{this.id}}">{{this.firstName}} {{this.lastName}}<br/>{{this.position}}</a></li>
-    {{/.}}
-</script>
-
-<script src="phonegap.js"></script>
-<script src="lib/handlebars.js"></script>
-<script src="lib/jquery-1.8.2.min.js"></script>
-<script src="js/storage/memory-store.js"></script>
-<<<<<<< HEAD
-<script src="js/HomeView.js"></script>
-<script src="js/main.js"></script>
-
-=======
-<script src="js/main.js"></script>
-<img src="img/logo.jpg" />
->>>>>>> 3e0721acdf0a2bfeae59b7e9f227a5b99a97735c
+    <script src="phonegap.js"></script>
+    <script src="lib/handlebars.js"></script>
+    <script src="lib/jquery-1.8.2.min.js"></script>
+    <script src="js/storage/memory-store.js"></script>
+    <script src="js/HomeView.js"></script>
+    <script src="js/PlayerView.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

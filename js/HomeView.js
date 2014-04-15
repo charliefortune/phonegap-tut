@@ -1,23 +1,23 @@
 var HomeView = function(store) {
  
-	 this.initialise = function(store){
-	 	this.el = $('<div/>');
-	 	this.el.on('keyup','.search-key',this.findByName);
-	 }
-
-	 this.findByName = function() {
-    	var self = this;
-    	store.findByName($('.search-key').val(), function(players) {
-    	    $('.player-list').html(HomeView.playerLiTpl(players));
-    	});
+    this.initialise = function(store){
+	this.el = $('<div/>');
+	this.el.on('keyup','.search-key',this.findByName);
     }
 
-	 this.render = function() {
-    	this.el.html(HomeView.bannerTpl() + HomeView.homeTpl());
-    	return this;
+    this.findByName = function() {
+	var self = this;
+	store.findByName($('.search-key').val(), function(players) {
+	    $('.player-list').html(HomeView.playerLiTpl(players));
+	});
     }
 
- this.initialise();
+    this.render = function() {
+	this.el.html(HomeView.bannerTpl() + HomeView.homeTpl());
+	return this;
+    }
+
+    this.initialise();
  
 }
 
