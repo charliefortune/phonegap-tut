@@ -13,7 +13,7 @@ var HomeView = function(store) {
     }
 
     this.render = function() {
-	this.el.html(HomeView.bannerTpl() + HomeView.homeTpl());
+	this.el.html(HomeView.homeTpl());
 	return this;
     }
 
