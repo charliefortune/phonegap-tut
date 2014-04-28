@@ -2,49 +2,13 @@ var app = {
 
     initialise: function() {
 	var self = this;
-	this.detailsURL = /^#players\/(\d{1,})/;
+	this.detailsURL = /^#contacts\/(\d{1,})/;
 	this.registerEvents();
 	this.store = new MemoryStore(function() {
 	    self.route();
 	});
-	$("body").on('click', '.find-contact-btn', this.findContact);
     },
-    
-    findContact: function(event) {
-	event.preventDefault();
-	console.log('findContact');
-	if (!navigator.contacts) {
-	    this.showAlert("Contacts API not supported", "Error");
-	    return;
-	}
-	// find all contacts with 'Bob' in any name field
-	var options = new ContactFindOptions();
-	options.filter="";
-	options.multiple=true;
-	var fields = ["displayName", "name"];
-	navigator.contacts.find(fields, 
-	    function onSuccess(contacts) {
-		this.showAlert('Found ' + contacts.length + ' contacts.');
-	    }, 
-	    function onError(contactError) {
-		this.showAlert('onError!');
-	    }, 
-	    options);
-
-	
-	//	var contact = navigator.contacts.create();
-	//	contact.name = {
-	//	    givenName: 'Ruari', 
-	//	    familyName: 'Mactaggart'
-	//	    };
-	//	var phoneNumbers = [];
-	//	phoneNumbers[0] = new ContactField('work', '07970722307', false);
-	//	//phoneNumbers[1] = new ContactField('mobile', player.cellPhone, true); // preferred number
-	//	contact.phoneNumbers = phoneNumbers;
-	//	contact.save();
-	return false;
-    },
-    
+        
     route: function() {
 	var self = this;
 	var hash = window.location.hash;
@@ -58,11 +22,12 @@ var app = {
 	    }
 	    return;
 	}
-	
+	console.log(hash);
 	var match = hash.match(app.detailsURL);
 	if (match) {
-	    this.store.findById(Number(match[1]), function(player) {
-		self.slidePage(new PlayerView(player).render());
+            console.log(match[0]);
+	    this.store.findById(Number(match[1]), function(contact) {
+		self.slidePage(new ContactView(contact).render());
 	    });
 	}
     },
