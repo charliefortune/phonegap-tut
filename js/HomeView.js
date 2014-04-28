@@ -13,6 +13,7 @@ var HomeView = function(store) {
     this.findContact = function(event) {
 	event.preventDefault();
 	var self = this;
+	app.showAlert('findContact', "Notice");
 	//console.log('findContact');
 	if (!navigator.contacts) {
 	    this.showAlert("Contacts API not supported", "Error");
@@ -26,7 +27,7 @@ var HomeView = function(store) {
 	navigator.contacts.find(fields, 
 	    function onSuccess(contacts) {
                 var msg = 'Found ' + contacts.length + ' contacts.';
-		app.showAlert(msg, "Notice");
+		//app.showAlert(msg, "Notice");
 		if(contacts.length > 0){
 		    console.log(msg);
                     $(".contact-list").html(HomeView.contactLiTpl(contacts));
