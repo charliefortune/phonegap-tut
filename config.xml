@@ -16,5 +16,7 @@
     <author href="https://charliefortune.com" email="ruari@charliefortune.com">
         Charlie Fortune
     </author>
+    
+    <plugin name="Contacts" value="org.apache.cordova.ContactManager" />
 
 </widget>
