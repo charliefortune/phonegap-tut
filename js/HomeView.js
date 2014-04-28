@@ -16,7 +16,7 @@ var HomeView = function(store) {
 	//app.showAlert('findContact', "Notice");
 	//console.log('findContact');
 	if (!navigator.contacts) {
-	    this.showAlert("Contacts API not supported", "Error");
+	    app.showAlert("Contacts API not supported", "Error");
 	    return;
 	}
         //console.log(event);
