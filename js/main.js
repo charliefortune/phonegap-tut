@@ -2,7 +2,7 @@ var app = {
 
     initialise: function() {
 	var self = this;
-	this.detailsURL = /^#contacts\/(\d{1,})/;
+	this.detailsURL = /^#contacts\/(.*)/;
 	this.registerEvents();
 	this.store = new MemoryStore(function() {
 	    self.route();
@@ -22,14 +22,36 @@ var app = {
 	    }
 	    return;
 	}
-	console.log(hash);
+	
 	var match = hash.match(app.detailsURL);
 	if (match) {
             console.log(match[0]);
-	    this.store.findById(Number(match[1]), function(contact) {
-		self.slidePage(new ContactView(contact).render());
-	    });
+	    this.findContactById(match[1]);
+	    //this.store.findById(Number(match[1]), function(contact) {
+		//self.slidePage(new ContactView(contact).render());
+	    //});
 	}
+    },
+    
+    findContactById: function(id){
+	var self = this;
+	var options = new ContactFindOptions();
+	options.filter = id;
+	options.multiple = false;
+	var fields = ["displayName", "name", "id","addresses","photos"];
+	navigator.contacts.find(fields, 
+	    function onSuccess(contacts) {
+                var msg = 'Found ' + contacts.length + ' contacts.';
+		if(contacts.length > 0){
+		    self.slidePage(new ContactView(contacts[0]).render());
+                }
+                else{
+                }
+	    }, 
+	    function onError(contactError) {
+		app.showAlert('onError!');
+	    }, 
+	    options);
     },
     
     slidePage: function(page) {

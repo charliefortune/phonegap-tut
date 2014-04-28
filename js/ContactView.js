@@ -9,7 +9,16 @@ var ContactView = function(contact) {
     };
     
     this.render = function() {
-	this.el.html(ContactView.template(contact));
+	var self = this;
+	self.el.html(ContactView.template(contact));
+	console.log(contact);
+	//Render the giftlist.
+	$.get('http://myapi.local/api/gift', null, function(data){
+	    console.log(data);
+	    var gifts = null;
+	    self.el.append(ContactView.giftLiTpl(gifts));
+	});
+	
 	return this;
     };
  
@@ -18,3 +27,4 @@ var ContactView = function(contact) {
 }
  
 ContactView.template = Handlebars.compile($("#contact-tpl").html());
+ContactView.giftLiTpl = Handlebars.compile($("#gift-li-tpl").html());

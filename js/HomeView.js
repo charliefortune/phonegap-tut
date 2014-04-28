@@ -3,7 +3,6 @@ var HomeView = function(store) {
     this.initialise = function(store) {
         this.el = $('<div/>');
         this.el.on('keyup', '.search-key', this.findContact);
-        //$("body").on('click', '.find-contact-btn', this.findContact);
     }
 
     this.render = function() {
@@ -22,11 +21,12 @@ var HomeView = function(store) {
 	var options = new ContactFindOptions();
 	options.filter = $(".search-key").val();
 	options.multiple = true;
-	var fields = ["displayName", "name"];
+	var fields = ["displayName", "name", "id"];
 	navigator.contacts.find(fields, 
 	    function onSuccess(contacts) {
                 var msg = 'Found ' + contacts.length + ' contacts.';
 		if(contacts.length > 0){
+		    console.log(msg);
                     $(".contact-list").html(HomeView.contactLiTpl(contacts));
                 }
                 else{

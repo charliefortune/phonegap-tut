@@ -47,9 +47,44 @@
             </div>
             <div class='details'>
             <img class='contact-image' src='img/{{displayName}}.jpg' />
+            
             <h1>{{displayName}}</h1>
             <h2>{{title}}</h2>
-            <span class="location"></span>
+            <span class="address">
+		
+	    </span>
+
+            <a href='#send' class="button send-msg">Send Message</a>
+        </script>
+	
+	
+	<!---------- Giftlist view --------->
+
+        <script id="gift-li-tpl" type="text/x-handlebars-template">
+            {{#.}}
+            <li>
+            <a href="#gifts/{{this.id}}">
+            {{this.title}} <br/>
+            </a>
+            </li>
+            {{/.}}
+        </script>
+	
+	 <!---------- Gift view --------->
+
+        <script id="gift-tpl" type="text/x-handlebars-template">
+            <div class='header'>
+            <a href='#' class="button header-button header-button-left">Back</a>
+            <h1>{{title}}</h1>
+            </div>
+            <div class='details'>
+            <img class='contact-image' src='img/{{title}}.jpg' />
+            
+            <h1>{{displayName}}</h1>
+            <h2>{{title}}</h2>
+            <span class="description">
+		{{description}}
+	    </span>
 
             <a href='#send' class="button send-msg">Send Message</a>
         </script>
@@ -61,6 +96,7 @@
 <!--        <script src="js/storage/contact-store.js"></script>-->
         <script src="js/HomeView.js"></script>
         <script src="js/ContactView.js"></script>
+	<script src="js/GiftView.js"></script>
         <script src="js/main.js"></script>
     </body>
 </html>
