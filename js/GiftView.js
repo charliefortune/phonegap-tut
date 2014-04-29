@@ -3,6 +3,7 @@ var GiftView = function(gift) {
     this.initialise = function() {
 	this.el = $('<div/>');
 	var self = this;
+	console.log(gift);
 	
     };
     

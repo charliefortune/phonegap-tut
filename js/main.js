@@ -2,7 +2,8 @@ var app = {
 
     initialise: function() {
 	var self = this;
-	this.apiURL = 'http://test.api.local';
+	//this.apiURL = 'http://test.api.local';
+	this.apiURL = 'http://mypa.local/api/'
         this.detailsURL = /^#(contact|gift)\/(.*)/;
 	this.registerEvents();
 	this.store = new MemoryStore(function() {
@@ -25,9 +26,10 @@ var app = {
 	}
 	
 	var match = hash.match(app.detailsURL);
+	//console.log(hash);
 	if (match) {
             var id = match[2];
-	    
+	    //console.log(match);
             switch(match[1]){
                 
                 case 'contact':
@@ -76,9 +78,8 @@ var app = {
      */
     findGiftById: function(id){
         var self = this;
-        $.get(this.apiURL + '/gift/' + id, null, function(data){
-	    console.log(data);
-	    self.slidePage(new GiftView(data[0]).render());
+        $.get(this.apiURL + 'gift/' + id, null, function(data){
+	    self.slidePage(new GiftView(data).render());
 	});
     },
     

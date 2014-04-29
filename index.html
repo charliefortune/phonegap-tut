@@ -9,7 +9,7 @@
 
         <script id="header-banner-tpl" type="text/x-handlebars-template">
             <div class="header-banner">
-            <img src="/img/logo.jpg" height="200px"/>
+		<img src="/img/logo.jpg" height="200px"/>
             </div>
         </script>
 
@@ -17,10 +17,10 @@
 
         <script id="home-tpl" type="text/x-handlebars-template">
             <div class='header'>
-            <h1>Home</h1>
+		<h1>Home</h1>
             </div>
             <div class='search-bar'>
-            <input class='search-key' type="search"/>
+		<input class='search-key' type="search"/>
             </div>
             <ul class='contact-list'></ul>
 
@@ -30,77 +30,80 @@
 
         <script id="contact-li-tpl" type="text/x-handlebars-template">
             {{#.}}
-            <li>
+	<li>
             <a href="#contact/{{this.id}}">
-            {{this.displayName}} <br/>
+		{{this.displayName}} <br/>
             </a>
-            </li>
-            {{/.}}
-        </script>
+	</li>
+	{{/.}}
+    </script>
 
-        <!---------- Contact view --------->
+    <!---------- Contact view --------->
 
-        <script id="contact-tpl" type="text/x-handlebars-template">
-            <div class='header'>
+    <script id="contact-tpl" type="text/x-handlebars-template">
+	<div class='header'>
             <a href='#' class="button header-button header-button-left">Back</a>
             <h1>Details</h1>
-            </div>
-            <div class='details'>
+	</div>
+	<div class='details'>
             <img class='contact-image' src='img/{{displayName}}.jpg' />
-            
+
             <h1>{{displayName}}</h1>
             <h2>{{title}}</h2>
             <span class="address">
 	    </span>
-    <label for='dob'>D.O.B.</label>
-            <input type='text' id='dob' value='{{dateOfBirth}}' />
+	    <label for='dob'>D.O.B.</label>
+            <input type='date' id='dob' value='{{dateOfBirth}}' />
             <input type='radio' name='gender' value='m' />Male
             <input type='radio' name='gender' value='f' />Female
-            
+
 
             <a href='#send' class="button send-msg">Send Message</a>
         </script>
-	
-	
+
+
 	<!---------- Giftlist view --------->
 
         <script id="gift-li-tpl" type="text/x-handlebars-template">
             {{#.}}
             <li>
-            <a href="#gift/{{this.id}}">
-            {{this.title}} <br/>
-            </a>
+		<a href="#gift/{{this.id}}">
+		    {{this.title}} <br/>
+		</a>
             </li>
             {{/.}}
         </script>
-	
-	 <!---------- Gift view --------->
+
+	<!---------- Gift view --------->
 
         <script id="gift-tpl" type="text/x-handlebars-template">
             <div class='header'>
-            <a href='#' class="button header-button header-button-left">Back</a>
-            <h1>{{title}}</h1>
+		<a href='#' class="button header-button header-button-left">Back</a>
+		<h1>{{title}}</h1>
             </div>
             <div class='details'>
-            <img class='contact-image' src='img/{{title}}.jpg' />
-            
-            <h1>{{displayName}}</h1>
-            <h2>{{title}}</h2>
-            <span class="description">
-		{{description}}
-	    </span>
+		<img class='contact-image' src='img/{{title}}.jpg' />
 
-            <a href='#send' class="button send-msg">Send Message</a>
-        </script>
+		<h1>{{title}}</h1>
+		<span class="description">
+		    {{description}}
+		</span>
+		<br />
+		<span class="price">
+		    &pound;{{price}}
+		</span>
 
-        <script src="phonegap.js"></script>
-        <script src="lib/handlebars.js"></script>
-        <script src="lib/jquery-1.8.2.min.js"></script>
-        <script src="js/storage/memory-store.js"></script>
-<!--        <script src="js/storage/contact-store.js"></script>-->
-        <script src="js/HomeView.js"></script>
-        <script src="js/ContactView.js"></script>
-	<script src="js/GiftView.js"></script>
-        <script src="js/main.js"></script>
-    </body>
-</html>
+		<a href='#send' class="button send-msg">Send this</a>
+		</script>
+
+		<script src="phonegap.js"></script>
+		<script src="lib/handlebars.js"></script>
+		<script src="lib/jquery-1.8.2.min.js"></script>
+		<script src="js/storage/memory-store.js"></script>
+		<!--        <script src="js/storage/contact-store.js"></script>-->
+		<script src="js/HomeView.js"></script>
+		<script src="js/ContactView.js"></script>
+		<script src="js/GiftView.js"></script>
+		<script src="js/main.js"></script>
+		</body>
+		</html>

@@ -13,7 +13,7 @@ var ContactView = function(contact) {
 	self.el.html(ContactView.template(contact));
 	//console.log(contact);
 	//Render the giftlist.
-	$.get(app.apiURL, null, function(data){
+	$.get(app.apiURL + '/gift', null, function(data){
 	    console.log(data);
 	    self.el.append(ContactView.giftLiTpl(data));
 	});
