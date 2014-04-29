@@ -31,7 +31,7 @@
         <script id="contact-li-tpl" type="text/x-handlebars-template">
             {{#.}}
             <li>
-            <a href="#contacts/{{this.id}}">
+            <a href="#contact/{{this.id}}">
             {{this.displayName}} <br/>
             </a>
             </li>
@@ -51,8 +51,12 @@
             <h1>{{displayName}}</h1>
             <h2>{{title}}</h2>
             <span class="address">
-		
 	    </span>
+    <label for='dob'>D.O.B.</label>
+            <input type='text' id='dob' value='{{dateOfBirth}}' />
+            <input type='radio' name='gender' value='m' />Male
+            <input type='radio' name='gender' value='f' />Female
+            
 
             <a href='#send' class="button send-msg">Send Message</a>
         </script>
@@ -63,7 +67,7 @@
         <script id="gift-li-tpl" type="text/x-handlebars-template">
             {{#.}}
             <li>
-            <a href="#gifts/{{this.id}}">
+            <a href="#gift/{{this.id}}">
             {{this.title}} <br/>
             </a>
             </li>

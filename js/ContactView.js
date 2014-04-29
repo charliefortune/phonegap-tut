@@ -11,12 +11,11 @@ var ContactView = function(contact) {
     this.render = function() {
 	var self = this;
 	self.el.html(ContactView.template(contact));
-	console.log(contact);
+	//console.log(contact);
 	//Render the giftlist.
-	$.get('http://myapi.local/api/gift', null, function(data){
+	$.get(app.apiURL, null, function(data){
 	    console.log(data);
-	    var gifts = null;
-	    self.el.append(ContactView.giftLiTpl(gifts));
+	    self.el.append(ContactView.giftLiTpl(data));
 	});
 	
 	return this;

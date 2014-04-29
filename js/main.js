@@ -2,7 +2,8 @@ var app = {
 
     initialise: function() {
 	var self = this;
-	this.detailsURL = /^#contacts\/(.*)/;
+	this.apiURL = 'http://test.api.local';
+        this.detailsURL = /^#(contact|gift)\/(.*)/;
 	this.registerEvents();
 	this.store = new MemoryStore(function() {
 	    self.route();
@@ -25,8 +26,21 @@ var app = {
 	
 	var match = hash.match(app.detailsURL);
 	if (match) {
-            console.log(match[0]);
-	    this.findContactById(match[1]);
+            var id = match[2];
+	    
+            switch(match[1]){
+                
+                case 'contact':
+                    this.findContactById(id);
+                    break;
+                    
+                case 'gift':
+                    this.findGiftById(id);
+                    break;
+                    
+                default:
+                    break;
+            }
 	    //this.store.findById(Number(match[1]), function(contact) {
 		//self.slidePage(new ContactView(contact).render());
 	    //});
@@ -52,6 +66,20 @@ var app = {
 		app.showAlert('onError!');
 	    }, 
 	    options);
+    },
+    
+    /**
+     * Look up a gift and switch in the view.
+     * 
+     * @param {int} id
+     * @returns {undefined}
+     */
+    findGiftById: function(id){
+        var self = this;
+        $.get(this.apiURL + '/gift/' + id, null, function(data){
+	    console.log(data);
+	    self.slidePage(new GiftView(data[0]).render());
+	});
     },
     
     slidePage: function(page) {
