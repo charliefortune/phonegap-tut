@@ -3,7 +3,7 @@ var app = {
     initialise: function() {
 	var self = this;
 	//this.apiURL = 'http://test.api.local';
-	this.apiURL = 'http://mypa.local/api/'
+	this.apiURL = 'http://mypa.fortuneglobal.co.uk/api/'
         this.detailsURL = /^#(contact|gift)\/(.*)/;
 	this.registerEvents();
 	this.store = new MemoryStore(function() {
