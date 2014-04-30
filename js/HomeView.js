@@ -23,13 +23,13 @@ var HomeView = function(store) {
 	var options = new ContactFindOptions();
 	options.filter = $(".search-key").val();
 	options.multiple = true;
-	var fields = ["displayName", "id"];
+	var fields = ["displayName", "id", "birthday"];
 	navigator.contacts.find(fields, 
 	    function onSuccess(contacts) {
                 var msg = 'Found ' + contacts.length + ' contacts.';
 		//app.showAlert("Finished search.", "Notice");
 		if(contacts.length > 0){
-		    console.log(msg);
+		    //console.log(contacts);
                     $(".contact-list").html(HomeView.contactLiTpl(contacts));
                 }
                 else{

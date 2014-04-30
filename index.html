@@ -2,113 +2,134 @@
     <head>
         <script src="css/source-sans-pro.js"></script>
         <link href="css/styles.css" rel="stylesheet">
+	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script src="bootstrap/js/bootstrap.min.js"></script>
     </head>
     <body>
+	<div class="container">
+	    <!---------- Banner view --------->
 
-        <!---------- Banner view --------->
+	    <script id="header-banner-tpl" type="text/x-handlebars-template">
+		<div class="header-banner">
+		    <img src="/img/logo.jpg" height="200px"/>
+		</div>
+	    </script>
 
-        <script id="header-banner-tpl" type="text/x-handlebars-template">
-            <div class="header-banner">
-		<img src="/img/logo.jpg" height="200px"/>
-            </div>
-        </script>
+	    <!---------- Home view --------->
 
-        <!---------- Home view --------->
+	    <script id="home-tpl" type="text/x-handlebars-template">
+		<div class='page-header text-center'>
+		    <h1>MyPA</h1>
+		</div>
+		<p class=" text-center">
+		    Who are you 'too busy' to buy a present for?
+		</p>
+		<div class='search-bar text-center'>
+		    <input class='search-key' type="search"/>
+		</div>
+		<ul class='contact-list'></ul>
 
-        <script id="home-tpl" type="text/x-handlebars-template">
-            <div class='header'>
-		<h1>Home</h1>
-            </div>
-            <div class='search-bar'>
-		<input class='search-key' type="search"/>
-            </div>
-            <ul class='contact-list'></ul>
+	    </script>
 
-        </script>
+	    <!---------- Contactlist view --------->
 
-        <!---------- Contactlist view --------->
+	    <script id="contact-li-tpl" type="text/x-handlebars-template">
+		{{#.}}
+		<li>
+		    <a href="#contact/{{this.id}}">
+			{{this.displayName}} <br/>
+		    </a>
+		</li>
+		{{/.}}
+	    </script>
 
-        <script id="contact-li-tpl" type="text/x-handlebars-template">
-            {{#.}}
-	<li>
-            <a href="#contact/{{this.id}}">
-		{{this.displayName}} <br/>
-            </a>
-	</li>
-	{{/.}}
-    </script>
+	    <!---------- Contact view --------->
 
-    <!---------- Contact view --------->
+	    <script id="contact-tpl" type="text/x-handlebars-template">
+		<div class='header text-center'>
+		    <a href='#' 
+		       class="button header-button header-button-left">Back</a>
+		    <h1>{{displayName}}</h1>
+		</div>
+		<div class='text-center'>
+		    <form>
+			<img class='contact-image' src='img/{{displayName}}.jpg' />
+			<h2>{{title}}</h2>
+			<span class="address">
+			</span>
+			<label for='dob'>D.O.B.</label>
+			<div class="">
+			    <input type='date' id='dob' value='{{dateOfBirth}}' />
+			</div>
+			    <div class="">
+				<input type='radio' 
+				       name='gender' 
+				       value='m' />Male
+				<input type='radio' 
+				       name='gender' 
+				       value='f' />Female
+			    </div>
 
-    <script id="contact-tpl" type="text/x-handlebars-template">
-	<div class='header'>
-            <a href='#' class="button header-button header-button-left">Back</a>
-            <h1>Details</h1>
+
+			<div class="text-center">
+			    <a href='#send' 
+			       class="button send-msg btn-primary btn-large">Send Gift</a>
+			</div>
+		    </form>
+		</div>
+	    </script>
+
+
+	    <!---------- Giftlist view --------->
+
+	    <script id="gift-li-tpl" type="text/x-handlebars-template">
+		{{#.}}
+		<li>
+		    <a href="#gift/{{this.id}}">
+			{{this.title}} <br/>
+		    </a>
+		    <a href="#gift/{{this.id}}" class="btn btn-primary">view</a>
+		    <a href="#send/{{this.id}}" class="btn btn-success">send</a>
+		</li>
+		{{/.}}
+	    </script>
+
+	    <!---------- Gift view --------->
+
+	    <script id="gift-tpl" type="text/x-handlebars-template">
+		<div class='header'>
+		    <a href='#contact/' class="button header-button header-button-left">Back</a>
+		    <h1>{{title}}</h1>
+		</div>
+		<div class='details'>
+		    <img class='contact-image' src='img/{{title}}.jpg' />
+		    <span class="description">
+			{{description}}
+		    </span>
+		    <br />
+		    <span class="price">
+			&pound;{{price}}
+		    </span>
+		    <br />
+		    <br />
+		    <span class="content">
+			{{content}}
+		    </span>
+		    <div class=" text-center">
+		    <a href='#send' class="button send-msg btn-primary btn-large">Send this</a>
+		    </div>
+		</div>
+	    </script>
+
+	    <script src="phonegap.js"></script>
+	    <script src="lib/handlebars.js"></script>
+	    <script src="lib/jquery-1.8.2.min.js"></script>
+	    <script src="js/storage/memory-store.js"></script>
+	    <!--        <script src="js/storage/contact-store.js"></script>-->
+	    <script src="js/HomeView.js"></script>
+	    <script src="js/ContactView.js"></script>
+	    <script src="js/GiftView.js"></script>
+	    <script src="js/main.js"></script>
 	</div>
-	<div class='details'>
-            <img class='contact-image' src='img/{{displayName}}.jpg' />
-
-            <h1>{{displayName}}</h1>
-            <h2>{{title}}</h2>
-            <span class="address">
-	    </span>
-	    <label for='dob'>D.O.B.</label>
-            <input type='date' id='dob' value='{{dateOfBirth}}' />
-            <input type='radio' name='gender' value='m' />Male
-            <input type='radio' name='gender' value='f' />Female
-
-
-            <a href='#send' class="button send-msg">Send Message</a>
-        </script>
-
-
-	<!---------- Giftlist view --------->
-
-        <script id="gift-li-tpl" type="text/x-handlebars-template">
-            {{#.}}
-            <li>
-		<a href="#gift/{{this.id}}">
-		    {{this.title}} <br/>
-		</a>
-            </li>
-            {{/.}}
-        </script>
-
-	<!---------- Gift view --------->
-
-        <script id="gift-tpl" type="text/x-handlebars-template">
-            <div class='header'>
-		<a href='#contact/' class="button header-button header-button-left">Back</a>
-		<h1>{{title}}</h1>
-            </div>
-            <div class='details'>
-		<img class='contact-image' src='img/{{title}}.jpg' />
-
-		<h1>{{title}}</h1>
-		<span class="description">
-		    {{description}}
-		</span>
-		<br />
-		<span class="price">
-		    &pound;{{price}}
-		</span>
-		<br />
-		<br />
-		<span class="content">
-		    {{content}}
-		</span>
-
-		<a href='#send' class="button send-msg">Send this</a>
-		</script>
-
-		<script src="phonegap.js"></script>
-		<script src="lib/handlebars.js"></script>
-		<script src="lib/jquery-1.8.2.min.js"></script>
-		<script src="js/storage/memory-store.js"></script>
-		<!--        <script src="js/storage/contact-store.js"></script>-->
-		<script src="js/HomeView.js"></script>
-		<script src="js/ContactView.js"></script>
-		<script src="js/GiftView.js"></script>
-		<script src="js/main.js"></script>
-		</body>
-		</html>
+    </body>
+</html>
