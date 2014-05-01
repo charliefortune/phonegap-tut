@@ -17,10 +17,10 @@
 	Charlie Fortune
     </author>
       
-    <icon src="img/android/ic_launcher/drawable-ldpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="ldpi" />
-    <icon src="img/android/ic_launcher/drawable-mdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="mdpi" />
-    <icon src="img/android/ic_launcher/drawable-hdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="hdpi" />
-    <icon src="img/android/ic_launcher/drawable-xhdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="xhdpi" />
+    <icon src="img/android/ic_launcher_icon/drawable-ldpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="ldpi" />
+    <icon src="img/android/ic_launcher_icon/drawable-mdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="mdpi" />
+    <icon src="img/android/ic_launcher_icon/drawable-hdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="hdpi" />
+    <icon src="img/android/ic_launcher_icon/drawable-xhdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="xhdpi" />
       
     <gap:plugin name="org.apache.cordova.contacts" version="0.2.9" />
     
