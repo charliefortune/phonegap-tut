@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <widget xmlns   = "http://www.w3.org/ns/widgets"
-	    xmlns:gap   = "http://phonegap.com/ns/1.0"
-	    id          = "com.charliefortune.mypa"
-	    versionCode = "4" 
-	    version     = "0.1.4" >
+	xmlns:gap   = "http://phonegap.com/ns/1.0"
+	id          = "com.charliefortune.mypa"
+	versionCode = "4" 
+	version     = "0.1.4" >
 
     <!-- versionCode is optional and Android only -->
 
@@ -16,7 +16,12 @@
     <author href="http://charliefortune.com" email="ruari@charliefortune.com">
 	Charlie Fortune
     </author>
-        
+      
+    <icon src="img/android/ic_launcher/drawable-ldpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="ldpi" />
+    <icon src="img/android/ic_launcher/drawable-mdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="mdpi" />
+    <icon src="img/android/ic_launcher/drawable-hdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="hdpi" />
+    <icon src="img/android/ic_launcher/drawable-xhdpi/ic_launcher_icon.png" gap:platform="android" gap:qualifier="xhdpi" />
+      
     <gap:plugin name="org.apache.cordova.contacts" version="0.2.9" />
     
     <feature name="http://api.phonegap.com/1.0/camera"/>
