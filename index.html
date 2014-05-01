@@ -6,7 +6,7 @@
 	<script src="bootstrap/js/bootstrap.min.js"></script>
     </head>
     <body>
-	<div class="container">
+	<div class="page-container">
 	    <!---------- Banner view --------->
 
 	    <script id="header-banner-tpl" type="text/x-handlebars-template">
@@ -48,33 +48,37 @@
 	    <script id="contact-tpl" type="text/x-handlebars-template">
 		<div class='header text-center'>
 		    <a href='#' 
-		       class="button header-button header-button-left">Back</a>
+		       class="btn left">Back</a>
 		    <h1>{{displayName}}</h1>
 		</div>
-		<div class='text-center'>
+		<div'>
 		    <form>
 			<img class='contact-image' src='img/{{displayName}}.jpg' />
 			<h2>{{title}}</h2>
 			<span class="address">
 			</span>
-			<label for='dob'>D.O.B.</label>
+
+			<div>
+			    <label for='dob' class="left">D.O.B.</label>
+			    <input type='date' 
+				   id='dob' 
+				   value='{{dateOfBirth}}' class="left"/>
+			</div>
+			<div class="clearfix"></div>
 			<div class="">
-			    <input type='date' id='dob' value='{{dateOfBirth}}' />
+			    <input type='radio' 
+				   name='gender' 
+				   value='m' />Male
+			    <input type='radio' 
+				   name='gender' 
+				   value='f' />Female
 			</div>
-			    <div class="">
-				<input type='radio' 
-				       name='gender' 
-				       value='m' />Male
-				<input type='radio' 
-				       name='gender' 
-				       value='f' />Female
-			    </div>
 
 
-			<div class="text-center">
-			    <a href='#send' 
-			       class="button send-msg btn-primary btn-large">Send Gift</a>
-			</div>
+			<!--			<div class="text-center">
+						    <a href='#send' 
+						       class="button send-msg btn-primary btn-large">Send Gift</a>
+						</div>-->
 		    </form>
 		</div>
 	    </script>
@@ -88,8 +92,10 @@
 		    <a href="#gift/{{this.id}}">
 			{{this.title}} <br/>
 		    </a>
-		    <a href="#gift/{{this.id}}" class="btn btn-primary">view</a>
-		    <a href="#send/{{this.id}}" class="btn btn-success">send</a>
+		    <div>
+			<a href="#gift/{{this.id}}" class="btn btn-primary left">view</a>
+			<a href="#send/{{this.id}}" class="btn btn-success left">send</a>
+		    </div>
 		</li>
 		{{/.}}
 	    </script>
@@ -98,13 +104,15 @@
 
 	    <script id="gift-tpl" type="text/x-handlebars-template">
 		<div class='header'>
-		    <a href='#contact/' class="button header-button header-button-left">Back</a>
+		    <a href='#contact/' class="btn left">Back</a>
 		    <h1>{{title}}</h1>
 		</div>
 		<div class='details'>
 		    <img class='contact-image' src='img/{{title}}.jpg' />
 		    <span class="description">
+			<em>
 			{{description}}
+			</em>
 		    </span>
 		    <br />
 		    <span class="price">
@@ -116,7 +124,12 @@
 			{{content}}
 		    </span>
 		    <div class=" text-center">
-		    <a href='#send' class="button send-msg btn-primary btn-large">Send this</a>
+			<div class="right">
+			    <a href='#contact/' class="button send-msg btn-large">It's shit</a>
+			</div>
+			<div class="right">
+			    <a href='#send' class="button send-msg btn-primary btn-large">Send this</a>
+			</div>
 		    </div>
 		</div>
 	    </script>

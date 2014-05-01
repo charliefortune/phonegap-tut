@@ -229,3 +229,11 @@ h2 {
     -webkit-transition-duration: .375s;
     -o-transition-duration: .375s;
 }
+
+.left{
+    float:left;
+}
+
+.right{
+    float:right;
+}
