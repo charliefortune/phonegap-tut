@@ -237,3 +237,20 @@ h2 {
 .right{
     float:right;
 }
+
+.page-container{
+    margin:10px;
+}
+
+.contact-form div{
+    margin:10px;
+}
+
+.gift-list-row{
+    margin-top: 4px;
+}
+
+.gift-list-row .btn{
+    margin-left:2px;
+    margin-right:2px;
+}

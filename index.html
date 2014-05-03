@@ -51,15 +51,15 @@
 		       class="btn left">Back</a>
 		    <h1>{{displayName}}</h1>
 		</div>
-		<div'>
-		    <form>
-			<img class='contact-image' src='img/{{displayName}}.jpg' />
+		<div>
+		    <form class="contact-form">
+<!--			<img class='contact-image' src='img/{{displayName}}.jpg' />-->
 			<h2>{{title}}</h2>
 			<span class="address">
 			</span>
 
 			<div>
-			    <label for='dob' class="left">D.O.B.</label>
+			    <label for='dob' class="span2">D.O.B.</label>
 			    <input type='date' 
 				   id='dob' 
 				   value='{{dateOfBirth}}' class="left"/>
@@ -92,7 +92,7 @@
 		    <a href="#gift/{{this.id}}">
 			{{this.title}} <br/>
 		    </a>
-		    <div>
+		    <div class="gift-list-row">
 			<a href="#gift/{{this.id}}" class="btn btn-primary left">view</a>
 			<a href="#send/{{this.id}}" class="btn btn-success left">send</a>
 		    </div>

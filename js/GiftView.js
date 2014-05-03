@@ -9,7 +9,7 @@ var GiftView = function(gift) {
     
     this.render = function() {
 	this.el.html(GiftView.template(gift));
-	console.log(gift);
+	//console.log(gift);
 	return this;
     };
  
