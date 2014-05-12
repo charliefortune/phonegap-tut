@@ -4,9 +4,9 @@ var app = {
 	var self = this;
 	//this.apiURL = 'http://test.api.local';
 	this.apiURL = 'http://mypa.fortuneglobal.co.uk/api/'
-        this.detailsURL = /^#(contact|gift)\/(.*)/;
+	this.detailsURL = /^#(contacts|gift|account)\/(.*)/;
 	this.registerEvents();
-	this.store = new MemoryStore(function() {
+	this.store = new WebSqlStore(function() {
 	    self.route();
 	});
     },
@@ -28,24 +28,37 @@ var app = {
 	var match = hash.match(app.detailsURL);
 	//console.log(hash);
 	if (match) {
-            var id = match[2];
+	    //var id = match[2];
 	    //console.log(match);
-            switch(match[1]){
+	    switch(match[1]){
                 
-                case 'contact':
-                    this.findContactById(id);
-                    break;
+		case 'contacts':
+		    
+		    switch(match[2]){
+			
+			case 'add':
+			    this.contactView = new ContactView(null).render();
+			    this.slidePage(this.contactView);
+			    break;
+			    
+			default:
+			    this.contactsView = new ContactsView().render();
+			    this.slidePage(this.contactsView);
+				
+		    }
+		    
+		    break;
                     
-                case 'gift':
-                    this.findGiftById(id);
-                    break;
+		case 'gift':
+		    this.findGiftById(id);
+		    break;
                     
-                default:
-                    break;
-            }
-	    //this.store.findById(Number(match[1]), function(contact) {
-		//self.slidePage(new ContactView(contact).render());
-	    //});
+		default:
+		    break;
+	    }
+	//this.store.findById(Number(match[1]), function(contact) {
+	//self.slidePage(new ContactView(contact).render());
+	//});
 	}
     },
     
@@ -57,12 +70,12 @@ var app = {
 	var fields = ["displayName", "name", "id","addresses","photos"];
 	navigator.contacts.find(fields, 
 	    function onSuccess(contacts) {
-                var msg = 'Found ' + contacts.length + ' contacts.';
+		var msg = 'Found ' + contacts.length + ' contacts.';
 		if(contacts.length > 0){
-		    self.slidePage(new ContactView(contacts[0]).render());
-                }
-                else{
-                }
+		    self.slidePage(new ContactsView(contacts[0]).render());
+		}
+		else{
+		}
 	    }, 
 	    function onError(contactError) {
 		app.showAlert('onError!');
@@ -77,8 +90,8 @@ var app = {
      * @returns {undefined}
      */
     findGiftById: function(id){
-        var self = this;
-        $.get(this.apiURL + 'gift/' + id, null, function(data){
+	var self = this;
+	$.get(this.apiURL + 'gift/' + id, null, function(data){
 	    self.slidePage(new GiftView(data).render());
 	});
     },

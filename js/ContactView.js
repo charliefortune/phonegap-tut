@@ -1,23 +1,12 @@
 var ContactView = function(contact) {
  
     this.initialise = function() {
-	this.el = $('<div/>');
-	var self = this;
-	$("body").on('click','.send-present',function(){
-	    app.showAlert('Sending a msg to ' + contact.displayName,"Jeremy-Deals!");
-	});
+	this.el = $('<div/>');	
     };
     
     this.render = function() {
 	var self = this;
-	self.el.html(ContactView.template(contact));
-	//console.log(contact);
-	//Render the giftlist.
-	$.get(app.apiURL + '/gift', null, function(data){
-	    console.log(data);
-	    self.el.append(ContactView.giftLiTpl(data));
-	});
-	
+	self.el.html(ContactView.template());	
 	return this;
     };
  
@@ -26,4 +15,3 @@ var ContactView = function(contact) {
 }
  
 ContactView.template = Handlebars.compile($("#contact-tpl").html());
-ContactView.giftLiTpl = Handlebars.compile($("#gift-li-tpl").html());

@@ -230,13 +230,13 @@ h2 {
     -o-transition-duration: .375s;
 }
 
-.left{
+/*.left{
     float:left;
 }
 
 .right{
     float:right;
-}
+}*/
 
 .page-container{
     margin:10px;
@@ -253,4 +253,9 @@ h2 {
 .gift-list-row .btn{
     margin-left:2px;
     margin-right:2px;
+}
+
+.big-btn{
+    width:50%;
+    margin:1em;
 }

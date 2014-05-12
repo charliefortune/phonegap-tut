@@ -21,67 +21,83 @@
 		<div class='page-header text-center'>
 		    <h1>MyPA</h1>
 		</div>
-		<p class=" text-center">
-		    Who are you 'too busy' to buy a present for?
+		<p class="text-center">
+		    Welcome to GiftPal.
+		    Don't ever forget again!
 		</p>
-		<div class='search-bar text-center'>
-		    <input class='search-key' type="search"/>
+		<div>
+		    <div class="text-center">
+			<a href="#contacts/" 
+			   class="btn btn-default btn-primary big-btn">My contacts</a>
+		    </div>
+		    <div class="text-center">
+			<a href="#gifts/" 
+			   class="btn btn-default btn-success big-btn">My gifts</a>
+		    </div>
+		    <div class="text-center">
+			<a href="#account/" 
+			   class="btn btn-default big-btn">My account</a>
+		    </div>
 		</div>
-		<ul class='contact-list'></ul>
-
 	    </script>
 
+	   
+	    
+	    <!---------- Contacts view --------->
+
+	    <script id="contacts-tpl" type="text/x-handlebars-template">
+		<div class='page-header text-center'>
+		    <h1>My Contacts</h1>
+		</div>
+		<p class="text-center">Add and edit your contacts.</p>
+		<div>
+		    <div class="text-center">
+			<a href="#contacts/add" 
+			   class="btn btn-default btn-primary big-btn">Add A Contact</a>
+		    </div>
+		    <div class="text-center">
+			<a href="#contacts/import" 
+			   class="btn btn-default btn-success big-btn">Import Contacts</a>
+		    </div>
+		</div>
+	    </script>
+	    
 	    <!---------- Contactlist view --------->
 
 	    <script id="contact-li-tpl" type="text/x-handlebars-template">
 		{{#.}}
 		<li>
-		    <a href="#contact/{{this.id}}">
+		    <a href="#contacts/{{this.id}}">
 			{{this.displayName}} <br/>
 		    </a>
 		</li>
 		{{/.}}
 	    </script>
 
-	    <!---------- Contact view --------->
+	    
+	    <!---------- Add/Edit Contact View --------->
 
 	    <script id="contact-tpl" type="text/x-handlebars-template">
-		<div class='header text-center'>
-		    <a href='#' 
-		       class="btn left">Back</a>
-		    <h1>{{displayName}}</h1>
+		<div class='page-header text-center'>
+		    <h1>Contact</h1>
 		</div>
+		<p class="text-center">Add and edit your contacts.</p>
 		<div>
-		    <form class="contact-form">
-<!--			<img class='contact-image' src='img/{{displayName}}.jpg' />-->
-			<h2>{{title}}</h2>
-			<span class="address">
-			</span>
-
-			<div>
-			    <label for='dob' class="span2">D.O.B.</label>
-			    <input type='date' 
-				   id='dob' 
-				   value='{{dateOfBirth}}' class="left"/>
-			</div>
-			<div class="clearfix"></div>
-			<div class="">
-			    <input type='radio' 
-				   name='gender' 
-				   value='m' />Male
-			    <input type='radio' 
-				   name='gender' 
-				   value='f' />Female
-			</div>
-
-
-			<!--			<div class="text-center">
-						    <a href='#send' 
-						       class="button send-msg btn-primary btn-large">Send Gift</a>
-						</div>-->
-		    </form>
+		    <div class="text-center">
+			<form>
+			    <input type="text" name="first_name" class="controls" placeholder="First name"/>
+			    <input type="text" name="last_name" class="controls" placeholder="Last name"/>
+			    <input type="text" name="address_1" class="controls" placeholder="Address 1"/>
+			    <input type="text" name="address_2" class="controls" placeholder="Address 2"/>
+			    <input type="text" name="address_3" class="controls" placeholder="Town"/>
+			    <input type="text" name="postcode" class="controls" placeholder="Postcode"/>
+			    <input type='date' name="dob" class="controls" placeholder="Date Of Birth"/>
+			</form>
+		    </div>
+		    
 		</div>
 	    </script>
+	    
 
 
 	    <!---------- Giftlist view --------->
@@ -111,7 +127,7 @@
 		    <img class='contact-image' src='img/{{title}}.jpg' />
 		    <span class="description">
 			<em>
-			{{description}}
+			    {{description}}
 			</em>
 		    </span>
 		    <br />
@@ -133,16 +149,126 @@
 		    </div>
 		</div>
 	    </script>
+	    
+	    <!---------- Account view --------->
+
+	    <script id="home-tpl" type="text/x-handlebars-template">
+		<div class='page-header text-center'>
+		    <h1>MyPA - Account Details</h1>
+		</div>
+		<div>
+		    <div class="text-center">
+			<a href="#contact/add" 
+			   class="btn btn-default btn-primary big-btn">My contacts</a>
+		    </div>
+		    <div class="text-center">
+			<a href="#contact/add" 
+			   class="btn btn-default btn-success big-btn">My gifts</a>
+		    </div>
+		    <div class="text-center">
+			<a href="#contact/add" 
+			   class="btn btn-default big-btn">Back</a>
+		    </div>
+		</div>
+
+	    </script>
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    <!---------- Contactlist view --------->
+
+<!--	    <script id="contact-li-tpl" type="text/x-handlebars-template">
+		{{#.}}
+		<li>
+		    <a href="#contact/{{this.id}}">
+			{{this.displayName}} <br/>
+		    </a>
+		</li>
+		{{/.}}
+	    </script>-->
+
+	    <!---------- Old Contact view --------->
+
+<!--	    <script id="contact-tpl" type="text/x-handlebars-template">
+		<div class='header text-center'>
+		    <a href='#' 
+		       class="btn left">Back</a>
+		    <h1>{{displayName}}</h1>
+		</div>
+		<div>
+		    <form class="contact-form">
+						<img class='contact-image' src='img/{{displayName}}.jpg' />
+			<h2>{{title}}</h2>
+			<span class="address">
+			</span>
+
+			<div>
+			    <label for='dob' class="span2">D.O.B.</label>
+			    <input type='date' 
+				   id='dob' 
+				   value='{{dateOfBirth}}' class="left"/>
+			</div>
+			<div class="clearfix"></div>
+			<div class="">
+			    <input type='radio' 
+				   name='gender' 
+				   value='m' />Male
+			    <input type='radio' 
+				   name='gender' 
+				   value='f' />Female
+			</div>
+
+
+						<div class="text-center">
+						    <a href='#send' 
+						       class="button send-msg btn-primary btn-large">Send Gift</a>
+						</div>
+		    </form>
+		</div>
+	    </script>-->
+
+ <!---------- Welcome view --------->
+
+ <!--	    <script id="welcome-tpl" type="text/x-handlebars-template">
+		 <div class='page-header text-center'>
+		     <h1>MyPA</h1>
+		 </div>
+		 <p>
+		     Welcome to GiftPal.
+		     Don't ever forget again!
+		 </p>
+		 <div>
+		     <a href="#contacts/" class="btn btn-primary">My contacts</a>
+		     <a href="#contact/add" class="btn btn-primary">My gifts</a>
+		 </div>
+				 <p class=" text-center">
+				     Who are you 'too busy' to buy a present for?
+				 </p>
+				 <div class='search-bar text-center'>
+				     <input class='search-key' type="search"/>
+				 </div>
+				 <ul class='contact-list'></ul>
+				    
+	     </script>-->
+
+	    
 
 	    <script src="phonegap.js"></script>
 	    <script src="lib/handlebars.js"></script>
 	    <script src="lib/jquery-1.8.2.min.js"></script>
-	    <script src="js/storage/memory-store.js"></script>
+	    <script src="js/storage/websql-store.js"></script>
 	    <!--        <script src="js/storage/contact-store.js"></script>-->
 	    <script src="js/HomeView.js"></script>
+	    <script src="js/ContactsView.js"></script>
 	    <script src="js/ContactView.js"></script>
 	    <script src="js/GiftView.js"></script>
 	    <script src="js/main.js"></script>
 	</div>
     </body>
 </html>
+
+
