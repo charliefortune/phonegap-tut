@@ -6,7 +6,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	this.db.transaction(
 	    function(tx) {
 		self.createTable(tx);
-		self.addSampleData(tx);
+	    //self.addSampleData(tx);
 	    },
 	    function(error) {
 		console.log('Transaction error: ' + error);
@@ -15,22 +15,21 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    function() {
 		console.log('Transaction success');
 		if (successCallback) successCallback();
-	    }
-	    )
+	    })
     }
 
     this.createTable = function(tx) {
 	//tx.executeSql('DROP TABLE IF EXISTS contacts');
 	var sql = "CREATE TABLE IF NOT EXISTS contacts ( " +
 	"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-	"firstName VARCHAR(50), " +
-	"lastName VARCHAR(50), " +
+	"first_name VARCHAR(50), " +
+	"last_name VARCHAR(50), " +
 	"address_1 VARCHAR(50), " +
 	"address_2 VARCHAR(50), " +
 	"address_3 VARCHAR(50), " +
 	"postcode VARCHAR(12), " + 
 	"dob VARCHAR(10), " +
-	"relationshipId INTEGER) ";
+	"relationship_id INTEGER) ";
 	tx.executeSql(sql, null,
 	    function() {
 		console.log('Create table success');
@@ -58,6 +57,15 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	"gift_id INTEGER, " + 
 	"tag_id INTEGER)";
 		
+    }
+    
+    this.updateDatabase = function(){
+	$.get(this.apiURL + 'gift/' + id, null, function(data){
+	    //Run through the gift data and update the device db
+	    for(i in data){
+		console.log(data[i]);
+	    }
+	});
     }
 
     this.addSampleData = function(tx, contacts) {
@@ -99,7 +107,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	}];
 	var l = contacts.length;
 	var sql = "INSERT OR REPLACE INTO contacts " +
-	"(id, firstName, lastName, address_1, address_2, address_3, postcode, dob, relationshipId) " +
+	"(id, first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) " +
 	"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	var c;
 	for (var i = 0; i < l; i++) {
@@ -118,11 +126,9 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	this.db.transaction(
 	    function(tx) {
 
-		var sql = "SELECT c.id, c.firstName, c.lastName, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationshipId, count(c.id) reportCount " +
-		"FROM contacts c ";
-
-		tx.executeSql(sql, [id], function(tx, results) {
-		    callback(results.rows.length === 1 ? results.rows : null);
+		var sql = "SELECT c.id, c.first_name, c.last_name, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationship_id, count(c.id) reportCount FROM contacts c ";
+		tx.executeSql(sql, [], function(tx, results) {
+		    callback(results.rows.length > 0 ? results.rows : null);
 		});
 	    },
 	    function(error) {
@@ -135,7 +141,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	this.db.transaction(
 	    function(tx) {
 
-		var sql = "SELECT c.id, c.firstName, c.lastName, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationshipId, count(c.id) reportCount " +
+		var sql = "SELECT c.id, c.first_name, c.last_name, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationship_id, count(c.id) reportCount " +
 		"FROM contacts c " +
 		"WHERE c.id=:id";
 
@@ -146,8 +152,18 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    function(error) {
 		alert("Transaction Error: " + error.message);
 	    }
-	    );
+	);
     };
+    
+    /**
+     * 
+     */
+    this.saveContact = function(data, callback){
+	var sql = "INSERT OR REPLACE INTO contacts (id, first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) VALUES (?,?,?,?,?,?,?,?,?)";
+	tx.executeSql(sql, [], function(tx, results) {
+	    callback(results);
+	});
+    }
 
     this.initialiseDatabase(successCallback, errorCallback);
 
