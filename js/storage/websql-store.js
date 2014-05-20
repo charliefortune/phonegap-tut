@@ -6,7 +6,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	this.db.transaction(
 	    function(tx) {
 		self.createTable(tx);
-	    //self.addSampleData(tx);
+		self.updateDatabase();
 	    },
 	    function(error) {
 		console.log('Transaction error: ' + error);
@@ -16,6 +16,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 		console.log('Transaction success');
 		if (successCallback) successCallback();
 	    })
+	   
     }
 
     this.createTable = function(tx) {
@@ -60,10 +61,11 @@ var WebSqlStore = function(successCallback, errorCallback) {
     }
     
     this.updateDatabase = function(){
-	$.get(this.apiURL + 'gift/' + id, null, function(data){
+	//console.log('update db');
+	$.get(app.apiURL + 'gift/', null, function(data){
 	    //Run through the gift data and update the device db
 	    for(i in data){
-		console.log(data[i]);
+		//console.log(data[i]);
 	    }
 	});
     }
@@ -128,13 +130,18 @@ var WebSqlStore = function(successCallback, errorCallback) {
 
 		var sql = "SELECT c.id, c.first_name, c.last_name, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationship_id, count(c.id) reportCount FROM contacts c ";
 		tx.executeSql(sql, [], function(tx, results) {
+		    //console.log(results);
+//		    var len = results.rows.length, i;
+//  
+//		    for (i = 0; i < len; i++){
+//			alert(results.rows.item(i).first_name );
+//		    }
 		    callback(results.rows.length > 0 ? results.rows : null);
 		});
 	    },
 	    function(error) {
 		alert("Transaction Error: " + error.message);
-	    }
-	    );
+	    });
     };
 
     this.findContactById = function(id, callback) {
@@ -151,18 +158,49 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    },
 	    function(error) {
 		alert("Transaction Error: " + error.message);
-	    }
-	);
+	    });
     };
     
-    /**
-     * 
-     */
-    this.saveContact = function(data, callback){
-	var sql = "INSERT OR REPLACE INTO contacts (id, first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) VALUES (?,?,?,?,?,?,?,?,?)";
-	tx.executeSql(sql, [], function(tx, results) {
-	    callback(results);
+    this.findGiftById = function(id, callback) {
+	this.db.transaction(
+	    function(tx) {
+
+		var sql = "SELECT *, count(id) reportCount " +
+		"FROM gifts g " +
+		"WHERE id=?";
+
+		tx.executeSql(sql, [id], function(tx, results) {
+		    callback(results.rows.length === 1 ? results.rows.item(0) : null);
+		});
+	    },
+	    function(error) {
+		alert("Transaction Error: " + error.message);
+	    });
+    };
+    
+    this.findGiftForContact = function(contact, callback){
+	
+    }
+    
+    this.saveContact = function(data,callback){
+	console.log(data);
+	this.findContacts(function(data){
+	    console.log(data);
 	});
+	this.db.transaction(
+	    function(tx) {
+		
+		var sql = "INSERT INTO contacts (id,first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) VALUES (NULL,?,?,?,?,?,?,?,?)";
+		tx.executeSql(sql, data, function(tx, results) {
+		    
+		    callback(results);
+		});
+	    },
+	    function(error) {
+		alert("Transaction Error: " + error.message);
+	    }
+	    );
+	
     }
 
     this.initialiseDatabase(successCallback, errorCallback);

@@ -2,9 +2,9 @@ var app = {
 
     initialise: function() {
 	var self = this;
-	//this.apiURL = 'http://test.api.local';
-	this.apiURL = 'http://mypa.fortuneglobal.co.uk/api/'
-	this.detailsURL = /^#(contacts|gift|account)\/(.*)/;
+	this.apiURL = 'http://mypa.local/api/';
+	//this.apiURL = 'http://mypa.fortuneglobal.co.uk/api/'
+	this.detailsURL = /^#(contacts|gift|account)\/(.*)?/;
 	this.registerEvents();
 	this.store = new WebSqlStore(function() {
 	    self.route();
@@ -28,25 +28,30 @@ var app = {
 	var match = hash.match(app.detailsURL);
 	//console.log(hash);
 	if (match) {
-	    //var id = match[2];
 	    //console.log(match);
 	    switch(match[1]){
                 
 		case 'contacts':
 		    
-		    switch(match[2]){
-			
-			case 'add':
-			    this.contactView = new ContactView(null).render();
-			    this.slidePage(this.contactView);
-			    break;
-			    
-			default:
-			    this.contactsView = new ContactsView().render();
-			    this.slidePage(this.contactsView);
-				
+		    if(match[2] == 'add'){
+			this.contactView = new ContactView(null).render();
+			this.slidePage(this.contactView);
 		    }
-		    
+		    else if(!isNaN(match[2])){
+			//console.log(match[2]);
+			self.store.findContactById(match[2],function(contact){
+			    console.log(contact);
+			    this.contactView = new ContactView(contact).render();
+			    self.slidePage(this.contactView);
+			});
+		    }
+		    else{
+			this.contactsView = new ContactsView().render();
+			this.slidePage(this.contactsView);
+		    }
+			
+			
+			
 		    break;
                     
 		case 'gift':
@@ -62,26 +67,26 @@ var app = {
 	}
     },
     
-    findContactById: function(id){
-	var self = this;
-	var options = new ContactFindOptions();
-	options.filter = id;
-	options.multiple = false;
-	var fields = ["displayName", "name", "id","addresses","photos"];
-	navigator.contacts.find(fields, 
-	    function onSuccess(contacts) {
-		var msg = 'Found ' + contacts.length + ' contacts.';
-		if(contacts.length > 0){
-		    self.slidePage(new ContactsView(contacts[0]).render());
-		}
-		else{
-		}
-	    }, 
-	    function onError(contactError) {
-		app.showAlert('onError!');
-	    }, 
-	    options);
-    },
+    //    findContactById: function(id){
+    //	var self = this;
+    //	var options = new ContactFindOptions();
+    //	options.filter = id;
+    //	options.multiple = false;
+    //	var fields = ["displayName", "name", "id","addresses","photos"];
+    //	navigator.contacts.find(fields, 
+    //	    function onSuccess(contacts) {
+    //		var msg = 'Found ' + contacts.length + ' contacts.';
+    //		if(contacts.length > 0){
+    //		    self.slidePage(new ContactsView(contacts[0]).render());
+    //		}
+    //		else{
+    //		}
+    //	    }, 
+    //	    function onError(contactError) {
+    //		app.showAlert('onError!');
+    //	    }, 
+    //	    options);
+    //    },
     
     /**
      * Look up a gift and switch in the view.
@@ -113,7 +118,7 @@ var app = {
 	$('.stage-right, .stage-left').not('.homePage').remove();
  
 	if (page === app.homePage) {
-	    // Always apply a Back transition (slide from left) when we go back to the search page
+	    // Always apply a Back transition (slide from left) when we go back to the home page
 	    $(page.el).attr('class', 'page stage-left');
 	    currentPageDest = "stage-right";
 	} else {

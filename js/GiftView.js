@@ -1,8 +1,11 @@
-var GiftView = function(gift) {
+var GiftView = function(giftId) {
+ 
+    var gift;
  
     this.initialise = function() {
 	this.el = $('<div/>');
 	var self = this;
+	gift = app.store.findGiftById(id);
 	console.log(gift);
 	
     };
@@ -12,6 +15,7 @@ var GiftView = function(gift) {
 	//console.log(gift);
 	return this;
     };
+    
  
     this.initialise();
  
