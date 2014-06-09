@@ -184,16 +184,11 @@ var WebSqlStore = function(successCallback, errorCallback) {
     
     this.saveContact = function(data,callback){
 	console.log(data);
-	this.findContacts(function(data){
-	    console.log(data);
-	});
 	this.db.transaction(
 	    function(tx) {
-		
 		var sql = "INSERT INTO contacts (id,first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) VALUES (NULL,?,?,?,?,?,?,?,?)";
-		tx.executeSql(sql, data, function(tx, results) {
-		    
-		    callback(results);
+		tx.executeSql(sql, data, function() {
+		    callback();
 		});
 	    },
 	    function(error) {

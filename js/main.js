@@ -175,6 +175,7 @@ var app = {
 
 app.initialise();
 
+
 //function onDeviceReady() {
 //    // specify contact search criteria
 //    var options = new ContactFindOptions();
