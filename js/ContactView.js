@@ -23,7 +23,7 @@ var ContactView = function(contact) {
 	    //app.showAlert('Contact added','Your contact has been saved.');
 	    //var dob = new Date(data[6]);
 	    var date = new Date();
-	    date.setTime = date.getTime() + 1000 * 10;
+	    date.setTime = date.getTime() + 1000 * 30;
 	    var id = 'katokuri123';
 	    console.log(window);
 	    window.plugin.notification.local.add({
