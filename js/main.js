@@ -1,10 +1,13 @@
 var app = {
 
+    notification_period: 5,
+
     initialise: function() {
+		
 	var self = this;
-	this.apiURL = 'http://mypa.local/api/';
+	this.apiURL = 'http://katokuri.local/api/';
 	//this.apiURL = 'http://mypa.fortuneglobal.co.uk/api/'
-	this.detailsURL = /^#(contacts|gift|account)\/(.*)?/;
+	this.detailsURL = /^#(contacts|gifts|account)\/(.*)?/;
 	this.registerEvents();
 	this.store = new WebSqlStore(function() {
 	    self.route();
@@ -14,7 +17,6 @@ var app = {
     route: function() {
 	var self = this;
 	var hash = window.location.hash;
-	
 	if (!hash) {
 	    if (this.homePage) {
 		this.slidePage(this.homePage);
@@ -26,7 +28,7 @@ var app = {
 	}
 	
 	var match = hash.match(app.detailsURL);
-	//console.log(hash);
+	
 	if (match) {
 	    //console.log(match);
 	    switch(match[1]){
@@ -39,13 +41,15 @@ var app = {
 		    }
 		    else if(!isNaN(match[2])){
 			//console.log(match[2]);
+			//show a single contact.
 			self.store.findContactById(match[2],function(contact){
-			    console.log(contact);
+			    //console.log(contact);
 			    this.contactView = new ContactView(contact).render();
 			    self.slidePage(this.contactView);
 			});
 		    }
 		    else{
+			//show the main contacts list.
 			this.contactsView = new ContactsView().render();
 			this.slidePage(this.contactsView);
 		    }
@@ -53,7 +57,25 @@ var app = {
 			
 			
 		    break;
-                    
+                
+		case 'gifts':
+		    
+		    if(!isNaN(match[2])){
+			//console.log(match[2]);
+			//Show a single gift
+			self.store.findGiftById(match[2],function(gift){
+			    console.log(gift);
+			    this.giftView = new GiftView(gift).render();
+			    self.slidePage(this.giftView);
+			});
+		    }
+		    else{
+			//Show the main gifts list
+			this.giftsView = new GiftsView().render();
+			this.slidePage(this.giftsView);
+		    }
+		    break;
+		
 		case 'gift':
 		    this.findGiftById(id);
 		    break;

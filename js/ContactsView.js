@@ -9,15 +9,16 @@ var ContactsView = function() {
 	var self = this;
 	self.el.html(ContactsView.template());
 	app.store.findContacts(function(rows) {
-	    var len = rows.length, i;
-	    var contacts = [];
-	    for (i = 0; i < len; i++) {
-		contacts.push(rows.item(i));
-	    }
+	    if(rows){
+		//If there are any contacts, list them.
+		var len = rows.length, i;
+		var contacts = [];
+		for (i = 0; i < len; i++) {
+		    contacts.push(rows.item(i));
+		}
 
-	    self.el.append(ContactsView.contactLiTpl(contacts))
-	    //$('.contact-list').html(ContactsView.contactLiTpl(data));
-	    //console.log(contacts);
+		self.el.append(ContactsView.contactLiTpl(contacts))
+	    }
 	});
 
 	return this;

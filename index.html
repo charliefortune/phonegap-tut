@@ -19,28 +19,28 @@
 
 	    <script id="home-tpl" type="text/x-handlebars-template">
 		<div class='page-header text-center'>
-		    <h1>MyPA</h1>
+		    <h1>Katokuri</h1>
 		</div>
 <!--		<div id="deviceready" class="blink">
 		    <p class="event listening">Connecting to Device</p>
 		    <p class="event received">Device is Ready</p>
 		</div>-->
 		<p class="text-center">
-		    Welcome to GiftPal.
-		    Don't ever forget again!
+		    Katokuri your longtime butler.<br />
+		    He remember for your special happy day!
 		</p>
 		<div>
 		    <div class="text-center">
 			<a href="#contacts/" 
-			   class="btn btn-default btn-primary big-btn">My contacts</a>
+			   class="btn btn-default btn-primary big-btn">Your Contacts</a>
 		    </div>
 		    <div class="text-center">
 			<a href="#gifts/" 
-			   class="btn btn-default btn-success big-btn">My gifts</a>
+			   class="btn btn-default btn-success big-btn">Gifts</a>
 		    </div>
 		    <div class="text-center">
 			<a href="#account/" 
-			   class="btn btn-default big-btn">My account</a>
+			   class="btn btn-default big-btn">Your Account</a>
 		    </div>
 		</div>
 	    </script>
@@ -52,9 +52,9 @@
 	    <script id="contacts-tpl" type="text/x-handlebars-template">
 		<div class='page-header text-center'>
 		    <a href='/' class="btn">Back</a>
-		    <h1>My Contacts</h1>
+		    <h1>Your Contacts</h1>
 		</div>
-		<p class="text-center">Add and edit your contacts.</p>
+		<p class="text-center">Who care for? Katokuri bring smile in happiness way.</p>
 		<div>
 		    <div class="text-center">
 			<a href="#contacts/add" 
@@ -93,6 +93,9 @@
 		    <div class="text-center">
 			<form id="contact-form">
 			    <div class="col-md-10">
+				<input type="hidden" name="id" value="{{this.id}}"/>
+			    </div>
+			    <div class="col-md-10">
 				<input type="text" name="first_name" class="form-control" value="{{this.first_name}}" placeholder="First name"/>
 			    </div>
 			    <div class="col-md-10">
@@ -118,6 +121,7 @@
 			    </div>
 			    <div class="text-center">
 				<button type="submit" id="contact-form-submit" class="btn btn-default big-btn">Save</button>
+				<button type="submit" id="contact-form-submit" class="btn btn-default big-btn">Delete</button>
 			    </div>
 
 			</form>
@@ -127,6 +131,27 @@
 	    </script>
 
 
+	    <!---------- Gifts view --------->
+
+	    <script id="gifts-tpl" type="text/x-handlebars-template">
+		<div class='page-header text-center'>
+		    <a href='/' class="btn">Back</a>
+		    <h1>Gifts</h1>
+		</div>
+		<p class="text-center">View the gifts you have sent so far.</p>
+		<div>
+		    <div class="text-center">
+			<a href="#gifts/add" 
+			   class="btn btn-default btn-primary big-btn">Add A Gift</a>
+		    </div>
+		    <div class="text-center">
+			<a href="#gifts/import" 
+			   class="btn btn-default btn-success big-btn">Cancel A Gift</a>
+		    </div>
+		</div>
+		<ul class='gift-list'></ul>
+	    </script>
+	    
 
 	    <!---------- Giftlist view --------->
 
@@ -293,6 +318,7 @@
 	    <script src="js/HomeView.js"></script>
 	    <script src="js/ContactsView.js"></script>
 	    <script src="js/ContactView.js"></script>
+	    <script src="js/GiftsView.js"></script>
 	    <script src="js/GiftView.js"></script>
 	    <script src="js/main.js"></script>
 	</div>

@@ -1,141 +1,168 @@
 var WebSqlStore = function(successCallback, errorCallback) {
 
-    this.initialiseDatabase = function(successCallback, errorCallback) {
+    this.initialiseDatabase = function(callback, errorCallback) {
 	var self = this;
-	this.db = window.openDatabase("MyPaDB", "1.0", "MyPA DB", 200000);
-	this.db.transaction(
-	    function(tx) {
-		self.createTable(tx);
-		self.updateDatabase();
-	    },
-	    function(error) {
-		console.log('Transaction error: ' + error);
-		if (errorCallback) errorCallback();
-	    },
-	    function() {
-		console.log('Transaction success');
-		if (successCallback) successCallback();
-	    })
+	this.db = window.openDatabase("KatokuriDB", "1.0", "Katokuri DB", 200000);
+	//self.createTables();
+	self.sync(callback);
 	   
     }
 
-    this.createTable = function(tx) {
-	//tx.executeSql('DROP TABLE IF EXISTS contacts');
-	var sql = "CREATE TABLE IF NOT EXISTS contacts ( " +
-	"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-	"first_name VARCHAR(50), " +
-	"last_name VARCHAR(50), " +
-	"address_1 VARCHAR(50), " +
-	"address_2 VARCHAR(50), " +
-	"address_3 VARCHAR(50), " +
-	"postcode VARCHAR(12), " + 
-	"dob VARCHAR(10), " +
-	"relationship_id INTEGER) ";
-	tx.executeSql(sql, null,
-	    function() {
-		console.log('Create table success');
-	    },
-	    function(tx, error) {
-		alert('Create table error: ' + error.message);
-	    });
-	var sql = "CREATE TABLE IF NOT EXISTS gifts ( " +
-	"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-	"title VARCHAR(50), " +
-	"description VARCHAR(50), " +
-	"price VARCHAR(50)) ";
-    
-	var sql = "CREATE TABLE IF NOT EXISTS tags ( " +
-	"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-	"title VARCHAR(50)) ";
-    
-	var sql = "CREATE TABLE IF NOT EXISTS gift_tags ( " +
-	"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-	"gift_id INTEGER, " + 
-	"tag_id INTEGER)";
-    
-	var sql = "CREATE TABLE IF NOT EXISTS orders ( " +
-	"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-	"gift_id INTEGER, " + 
-	"tag_id INTEGER)";
+
+    //Database Admin and Sync Functions
+
+    this.createTables = function(tx) {
+		
+	this.db.transaction(function(tx){
+	    var sql;
+	    //tx.executeSql('DROP TABLE IF EXISTS contact');
+	    sql = "CREATE TABLE IF NOT EXISTS contact ( " +
+	    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+	    "first_name VARCHAR(50), " +
+	    "last_name VARCHAR(50), " +
+	    "address_1 VARCHAR(50), " +
+	    "address_2 VARCHAR(50), " +
+	    "address_3 VARCHAR(50), " +
+	    "postcode VARCHAR(12), " + 
+	    "dob VARCHAR(10), " +
+	    "relationship_id INTEGER, " + 
+	    "modified DATETIME) ";
+	    tx.executeSql(sql, null,
+		function() {
+		    console.log('CREATE contact TABLE success.');
+		},
+		onError);	    
+	
+	    //tx.executeSql('DROP TABLE IF EXISTS gift');
+	    sql = "CREATE TABLE IF NOT EXISTS gift ( " +
+	    "id INTEGER PRIMARY KEY, " +
+	    "title VARCHAR(50), " +
+	    "description VARCHAR(100), " +
+	    "price DOUBLE," +
+	    "modified DATETIME);";
+	    
+	    tx.executeSql(sql, null,
+		function() {
+		    console.log('CREATE gift TABLE success.');
+		},
+		onError);
+	    
+	    //	    tx.executeSql('DROP TABLE IF EXISTS tag');      
+	    sql = "CREATE TABLE IF NOT EXISTS tag ( " +
+	    "id INTEGER PRIMARY KEY, " +
+	    "title VARCHAR(50), " + 
+	    "modified DATETIME) ";
+	    tx.executeSql(sql, null,
+		function() {
+		    console.log('CREATE tag TABLE success.');
+		},
+		onError);
+	
+	    //	    tx.executeSql('DROP TABLE IF EXISTS gift_tag');
+	    sql = "CREATE TABLE IF NOT EXISTS gift_tag ( " +
+	    "id INTEGER PRIMARY KEY, " +
+	    "gift_id INTEGER, " + 
+	    "tag_id INTEGER, " + 
+	    "modified DATETIME)";
+	    tx.executeSql(sql, null,
+		function() {
+		    console.log('CREATE gift_tag TABLE success.');
+		},
+		onError);
+	
+	    //	    tx.executeSql('DROP TABLE IF EXISTS userorder');
+	    sql = "CREATE TABLE IF NOT EXISTS userorder ( " +
+	    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+	    "gift_id INTEGER, " + 
+	    "tag_id INTEGER, " + 
+	    "modified DATETIME)";
+	    tx.executeSql(sql, null,
+		function() {
+		    console.log('CREATE userorder TABLE success.');
+		},
+		onError);
+	});
 		
     }
     
-    this.updateDatabase = function(){
-	//console.log('update db');
-	$.get(app.apiURL + 'gift/', null, function(data){
-	    //Run through the gift data and update the device db
-	    for(i in data){
-		//console.log(data[i]);
+	
+    this.sync = function(callback) {
+	var self = this;
+	var tables = ["gift","tag","gift_tag"];
+	for(var i in tables){
+	    var table = tables[i];
+	    var syncURL = app.apiURL + 'sync/' + table;
+	    this.getLastSync(table, function(lastSync){
+		self.getChanges(syncURL, lastSync,
+		    function (changes) {
+			self.applyChanges(changes, callback);
+		    });
+	    });
+	}
+	
+ 
+    }
+	
+    this.getLastSync = function(table, callback) {
+	this.db.transaction(
+	    function(tx) {
+		var sql = "SELECT MAX(modified) as lastSync FROM " + table;
+		console.log(sql);
+		tx.executeSql(sql, this.txErrorHandler,
+		    function(tx, results) {
+			var lastSync = results.rows.item(0).lastSync;
+			callback(lastSync);
+		    });
+	    });
+    }
+	
+    this.getChanges = function(syncURL, since, callback) {
+	console.log(syncURL);
+	$.ajax({
+	    url: syncURL,
+	    data: {
+		since: since
+	    },
+	    dataType:"json",
+	    success:function (changes) {
+		callback(changes);
+	    },
+	    error: function(model, response) {
+		alert(response.responseText);
 	    }
 	});
+ 
     }
-
-    this.addSampleData = function(tx, contacts) {
-	var contacts = [
-	{
-	    "id": 1, 
-	    "firstName": "Ryan", 
-	    "lastName": "Howard", 
-	    "address_1":"10 Madison Avenue", 
-	    "address_2": '', 
-	    "address_3":"New York, NY", 
-	    "postcode":"212-999-8888", 
-	    "dob":"1987-10-12", 
-	    "relationshipId":1
-	},
-
-	{
-	    "id": 2, 
-	    "firstName": "Michael", 
-	    "lastName": "Scott", 
-	    "title":"Regional Manager", 
-	    "managerId": 1, 
-	    "city":"Scranton, PA", 
-	    "cellPhone":"570-865-2536", 
-	    "officePhone":"570-123-4567", 
-	    "email":"michael@dundermifflin.com"
-	},
-
-	{
-	    "id": 3, 
-	    "firstName": "Dwight", 
-	    "lastName": "Schrute", 
-	    "title":"Assistant Regional Manager", 
-	    "managerId": 2, 
-	    "city":"Scranton, PA", 
-	    "cellPhone":"570-865-1158", 
-	    "officePhone":"570-843-8963", 
-	    "email":"dwight@dundermifflin.com"
-	}];
-	var l = contacts.length;
-	var sql = "INSERT OR REPLACE INTO contacts " +
-	"(id, first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) " +
-	"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	var c;
-	for (var i = 0; i < l; i++) {
-	    c = contacts[i];
-	    tx.executeSql(sql, [c.id, c.firstName, c.lastName, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationshipId],
-		function() {
-		    console.log('INSERT success');
-		},
-		function(tx, error) {
-		    alert('INSERT error: ' + error.message);
-		});
-	}
+	
+    this.applyChanges = function(items, callback) {
+	this.db.transaction(
+	    function(tx) {
+		var l = items.length;
+		var sql =
+		"INSERT OR REPLACE INTO gift (id, title, description, price, modified) " +
+		"VALUES (?, ?, ?, ?, ?)";
+		var item;
+		for (var i = 0; i < l; i++) {
+		    item = items[i];
+		    var params = [item.id, item.title, item.description, item.price, item.modified];
+		    tx.executeSql(sql, params,onError);
+		}
+	    },
+	    this.txErrorHandler,
+	    function(tx) {
+		callback();
+	    });
     }
-
+    
+    
+   
+    //Contact Data Functions
+ 
     this.findContacts = function(callback) {
 	this.db.transaction(
 	    function(tx) {
-
-		var sql = "SELECT c.id, c.first_name, c.last_name, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationship_id, count(c.id) reportCount FROM contacts c ";
+		var sql = "SELECT id, first_name, last_name, dob FROM contact WHERE id > 0";
 		tx.executeSql(sql, [], function(tx, results) {
-		    //console.log(results);
-//		    var len = results.rows.length, i;
-//  
-//		    for (i = 0; i < len; i++){
-//			alert(results.rows.item(i).first_name );
-//		    }
 		    callback(results.rows.length > 0 ? results.rows : null);
 		});
 	    },
@@ -148,9 +175,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	this.db.transaction(
 	    function(tx) {
 
-		var sql = "SELECT c.id, c.first_name, c.last_name, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationship_id, count(c.id) reportCount " +
-		"FROM contacts c " +
-		"WHERE c.id=:id";
+		var sql = "SELECT c.id, c.first_name, c.last_name, c.address_1, c.address_2, c.address_3, c.postcode, c.dob, c.relationship_id FROM contact c WHERE c.id=:id";
 
 		tx.executeSql(sql, [id], function(tx, results) {
 		    callback(results.rows.length === 1 ? results.rows.item(0) : null);
@@ -161,14 +186,26 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    });
     };
     
+    
+    //Gift Data Functions
+    
+    this.findGifts = function(callback) {
+	this.db.transaction(
+	    function(tx) {
+		var sql = "SELECT id, title, description, price FROM gift WHERE id > 0";
+		tx.executeSql(sql, [], function(tx, results) {
+		    callback(results.rows.length > 0 ? results.rows : null);
+		});
+	    },
+	    function(error) {
+		alert("Transaction Error: " + error.message);
+	    });
+    };
+  
     this.findGiftById = function(id, callback) {
 	this.db.transaction(
 	    function(tx) {
-
-		var sql = "SELECT *, count(id) reportCount " +
-		"FROM gifts g " +
-		"WHERE id=?";
-
+		var sql = "SELECT * FROM gift g WHERE id=?";
 		tx.executeSql(sql, [id], function(tx, results) {
 		    callback(results.rows.length === 1 ? results.rows.item(0) : null);
 		});
@@ -178,26 +215,65 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    });
     };
     
+    /**
+     * Take a contact and find a suitable gift for them.
+     */
     this.findGiftForContact = function(contact, callback){
 	
     }
     
     this.saveContact = function(data,callback){
-	console.log(data);
 	this.db.transaction(
 	    function(tx) {
-		var sql = "INSERT INTO contacts (id,first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) VALUES (NULL,?,?,?,?,?,?,?,?)";
-		tx.executeSql(sql, data, function() {
+		//console.log(data);
+		if(data[0] == 0){
+		    //console.log('INSERT');
+		    var sql = "INSERT INTO contact (first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) VALUES (?,?,?,?,?,?,?,?)";
+		    ;
+		    tx.executeSql(sql, [data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8]] , function() {
+			callback();
+		    });
+		}
+		else{
+		    //console.log('UPDATE');
+		    var sql = "UPDATE contact SET first_name = ?, last_name = ?, address_1 = ?, address_2 = ?, address_3 = ?, postcode = ?, dob = ?, relationship_id = ? WHERE id = ?";
+		    tx.executeSql(sql, [data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[0]], function() {
+			callback();
+		    });
+		}		
+	    },
+	    onError
+	    );
+	
+    }
+
+    this.deleteContact = function(id,callback){
+	this.db.transaction(
+	    function(tx) {
+		console.log('DELETE');
+		var sql = "DELETE FROM contact WHERE id = ?";
+		tx.executeSql(sql, [id], function() {
 		    callback();
 		});
+		
 	    },
-	    function(error) {
-		alert("Transaction Error: " + error.message);
-	    }
+	    onError
 	    );
 	
     }
 
     this.initialiseDatabase(successCallback, errorCallback);
-
+    
+    function onReadyTransaction( ){
+	console.log( 'Transaction completed' )
+    }
+ 
+    function onSuccessExecuteSql(tx, results){
+    //console.log( 'Execute SQL completed' )
+    }
+    
+    function onError(tx, err){
+	console.log(err.message);
+    }
+    
 }
