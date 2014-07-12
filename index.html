@@ -158,11 +158,11 @@
 	    <script id="gift-li-tpl" type="text/x-handlebars-template">
 		{{#.}}
 		<li>
-		    <a href="#gift/{{this.id}}">
+		    <a href="#gifts/{{this.id}}">
 			{{this.title}} <br/>
 		    </a>
 		    <div class="gift-list-row">
-			<a href="#gift/{{this.id}}" class="btn btn-primary left">view</a>
+			<a href="#gifts/{{this.id}}" class="btn btn-primary left">view</a>
 			<a href="#send/{{this.id}}" class="btn btn-success left">send</a>
 		    </div>
 		</li>
@@ -187,17 +187,13 @@
 		    <span class="price">
 			&pound;{{price}}
 		    </span>
-		    <br />
-		    <br />
-		    <span class="content">
-			{{content}}
-		    </span>
+		    <br />		    
 		    <div class=" text-center">
 			<div class="right">
-			    <a href='#contact/' class="button send-msg btn-large">It's shit</a>
+			    <a href='#contact/' class="btn btn-default btn-primary big-btn">Nope</a>
 			</div>
 			<div class="right">
-			    <a href='#send' class="button send-msg btn-primary btn-large">Send this</a>
+			    <a href='#send' class="btn btn-default btn-success big-btn">Send this!</a>
 			</div>
 		    </div>
 		</div>

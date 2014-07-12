@@ -21,7 +21,6 @@ var GiftsView = function() {
 
 		self.el.append(GiftsView.giftLiTpl(gifts))
 	    //$('.gift-list').html(GiftsView.giftLiTpl(data));
-	    //console.log(gifts);
 	    }
 	});
 	

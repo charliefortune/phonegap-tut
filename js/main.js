@@ -40,10 +40,8 @@ var app = {
 			this.slidePage(this.contactView);
 		    }
 		    else if(!isNaN(match[2])){
-			//console.log(match[2]);
 			//show a single contact.
 			self.store.findContactById(match[2],function(contact){
-			    //console.log(contact);
 			    this.contactView = new ContactView(contact).render();
 			    self.slidePage(this.contactView);
 			});
@@ -61,7 +59,6 @@ var app = {
 		case 'gifts':
 		    
 		    if(!isNaN(match[2])){
-			//console.log(match[2]);
 			//Show a single gift
 			self.store.findGiftById(match[2],function(gift){
 			    console.log(gift);
@@ -72,13 +69,16 @@ var app = {
 		    else{
 			//Show the main gifts list
 			this.giftsView = new GiftsView().render();
-			this.slidePage(this.giftsView);
+			self.slidePage(this.giftsView);
 		    }
 		    break;
 		
-		case 'gift':
-		    this.findGiftById(id);
-		    break;
+//		case 'gift':
+//		    if(!isNaN(match[2])){
+//			console.log(id);
+//			this.findGiftById(id);
+//		    }
+//		    break;
                     
 		default:
 		    break;

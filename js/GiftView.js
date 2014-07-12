@@ -1,18 +1,12 @@
-var GiftView = function(giftId) {
- 
-    var gift;
- 
+var GiftView = function(gift) {
+  
     this.initialise = function() {
 	this.el = $('<div/>');
-	var self = this;
-	gift = app.store.findGiftById(id);
-	console.log(gift);
 	
     };
     
     this.render = function() {
 	this.el.html(GiftView.template(gift));
-	//console.log(gift);
 	return this;
     };
     

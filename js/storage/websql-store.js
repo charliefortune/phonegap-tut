@@ -88,7 +88,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	
     this.sync = function(callback) {
 	var self = this;
-	var tables = ["gift","tag","gift_tag"];
+	var tables = ["gift"];
 	for(var i in tables){
 	    var table = tables[i];
 	    var syncURL = app.apiURL + 'sync/' + table;
@@ -165,9 +165,6 @@ var WebSqlStore = function(successCallback, errorCallback) {
 		tx.executeSql(sql, [], function(tx, results) {
 		    callback(results.rows.length > 0 ? results.rows : null);
 		});
-	    },
-	    function(error) {
-		alert("Transaction Error: " + error.message);
 	    });
     };
 
@@ -180,9 +177,6 @@ var WebSqlStore = function(successCallback, errorCallback) {
 		tx.executeSql(sql, [id], function(tx, results) {
 		    callback(results.rows.length === 1 ? results.rows.item(0) : null);
 		});
-	    },
-	    function(error) {
-		alert("Transaction Error: " + error.message);
 	    });
     };
     
@@ -196,9 +190,6 @@ var WebSqlStore = function(successCallback, errorCallback) {
 		tx.executeSql(sql, [], function(tx, results) {
 		    callback(results.rows.length > 0 ? results.rows : null);
 		});
-	    },
-	    function(error) {
-		alert("Transaction Error: " + error.message);
 	    });
     };
   
@@ -209,9 +200,6 @@ var WebSqlStore = function(successCallback, errorCallback) {
 		tx.executeSql(sql, [id], function(tx, results) {
 		    callback(results.rows.length === 1 ? results.rows.item(0) : null);
 		});
-	    },
-	    function(error) {
-		alert("Transaction Error: " + error.message);
 	    });
     };
     
