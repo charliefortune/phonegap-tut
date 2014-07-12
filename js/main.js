@@ -5,8 +5,8 @@ var app = {
     initialise: function() {
 		
 	var self = this;
-	this.apiURL = 'http://katokuri.local/api/';
-	//this.apiURL = 'http://mypa.fortuneglobal.co.uk/api/'
+	//this.apiURL = 'http://katokuri.local/api/';
+	this.apiURL = 'http://katokuri.fortuneglobal.co.uk/api/'
 	this.detailsURL = /^#(contacts|gifts|account)\/(.*)?/;
 	this.registerEvents();
 	this.store = new WebSqlStore(function() {
