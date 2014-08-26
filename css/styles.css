@@ -259,3 +259,11 @@ h2 {
     width:50%;
     margin:1em;
 }
+
+img.icon{
+    width:70px;
+}
+
+img.icon-small{
+    width:30px;
+}

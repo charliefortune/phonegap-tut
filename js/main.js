@@ -6,8 +6,8 @@ var app = {
 		
 	var self = this;
 	//this.apiURL = 'http://katokuri.local/api/';
-	this.apiURL = 'http://katokuri.fortuneglobal.co.uk/api/'
-	this.detailsURL = /^#(contacts|gifts|account)\/(.*)?/;
+	this.apiURL = 'http://katokuri.com/api/'
+	this.detailsURL = /^#(contacts|gifts|account)\/?(.*)?\/+?(.*)?\/?(.*)?/;
 	this.registerEvents();
 	this.store = new WebSqlStore(function() {
 	    self.route();
@@ -36,8 +36,24 @@ var app = {
 		case 'contacts':
 		    
 		    if(match[2] == 'add'){
+			//Show add contact form.
 			this.contactView = new ContactView(null).render();
 			this.slidePage(this.contactView);
+		    }
+		    else if(match[2] == 'view'){
+			//Show the view contact view.
+			self.store.findContactById(match[3],function(contact){
+			    this.contactView = new ContactView(contact).render();
+			    self.slidePage(this.contactView);
+			});
+		    }
+		    else if(match[2] == 'edit'){
+			//Show the edit contact view.
+			self.store.findContactById(match[3],function(contact){
+			    this.editContactView = new EditContactView(contact).render();
+			    self.slidePage(this.editContactView);
+			});
+			
 		    }
 		    else if(!isNaN(match[2])){
 			//show a single contact.
@@ -47,7 +63,7 @@ var app = {
 			});
 		    }
 		    else{
-			//show the main contacts list.
+			//show all contacts list.
 			this.contactsView = new ContactsView().render();
 			this.slidePage(this.contactsView);
 		    }
@@ -61,54 +77,32 @@ var app = {
 		    if(!isNaN(match[2])){
 			//Show a single gift
 			self.store.findGiftById(match[2],function(gift){
-			    console.log(gift);
+			    //console.log(gift);
 			    this.giftView = new GiftView(gift).render();
 			    self.slidePage(this.giftView);
 			});
 		    }
-		    else{
+		    else if (match[2] == 'contact'){
+			//Show the contact gifts list - filtered by tags and previous selections.
+			self.store.findContactById(match[3],function(contact){
+			    this.giftsView = new GiftsView(contact).render();
+			    self.slidePage(this.giftsView);
+			});
+		    }
+		    else {
 			//Show the main gifts list
-			this.giftsView = new GiftsView().render();
+			this.giftsView = new GiftsView(null).render();
 			self.slidePage(this.giftsView);
 		    }
 		    break;
-		
-//		case 'gift':
-//		    if(!isNaN(match[2])){
-//			console.log(id);
-//			this.findGiftById(id);
-//		    }
-//		    break;
                     
 		default:
 		    break;
 	    }
-	//this.store.findById(Number(match[1]), function(contact) {
-	//self.slidePage(new ContactView(contact).render());
-	//});
+
 	}
     },
     
-    //    findContactById: function(id){
-    //	var self = this;
-    //	var options = new ContactFindOptions();
-    //	options.filter = id;
-    //	options.multiple = false;
-    //	var fields = ["displayName", "name", "id","addresses","photos"];
-    //	navigator.contacts.find(fields, 
-    //	    function onSuccess(contacts) {
-    //		var msg = 'Found ' + contacts.length + ' contacts.';
-    //		if(contacts.length > 0){
-    //		    self.slidePage(new ContactsView(contacts[0]).render());
-    //		}
-    //		else{
-    //		}
-    //	    }, 
-    //	    function onError(contactError) {
-    //		app.showAlert('onError!');
-    //	    }, 
-    //	    options);
-    //    },
     
     /**
      * Look up a gift and switch in the view.

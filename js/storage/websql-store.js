@@ -3,7 +3,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
     this.initialiseDatabase = function(callback, errorCallback) {
 	var self = this;
 	this.db = window.openDatabase("KatokuriDB", "1.0", "Katokuri DB", 200000);
-	//self.createTables();
+	self.updateTables();
 	self.sync(callback);
 	   
     }
@@ -11,7 +11,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 
     //Database Admin and Sync Functions
 
-    this.createTables = function(tx) {
+    this.updateTables = function(tx) {
 		
 	this.db.transaction(function(tx){
 	    var sql;
@@ -26,10 +26,11 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    "postcode VARCHAR(12), " + 
 	    "dob VARCHAR(10), " +
 	    "relationship_id INTEGER, " + 
-	    "modified DATETIME) ";
+	    "modified DATETIME" + 
+	    "gender_id INTEGER) ";
 	    tx.executeSql(sql, null,
 		function() {
-		    console.log('CREATE contact TABLE success.');
+		//console.log('CREATE contact TABLE success.');
 		},
 		onError);	    
 	
@@ -43,7 +44,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    
 	    tx.executeSql(sql, null,
 		function() {
-		    console.log('CREATE gift TABLE success.');
+		//console.log('CREATE gift TABLE success.');
 		},
 		onError);
 	    
@@ -54,7 +55,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    "modified DATETIME) ";
 	    tx.executeSql(sql, null,
 		function() {
-		    console.log('CREATE tag TABLE success.');
+		//console.log('CREATE tag TABLE success.');
 		},
 		onError);
 	
@@ -66,7 +67,31 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    "modified DATETIME)";
 	    tx.executeSql(sql, null,
 		function() {
-		    console.log('CREATE gift_tag TABLE success.');
+		//console.log('CREATE gift_tag TABLE success.');
+		},
+		onError);
+		
+	    //	    tx.executeSql('DROP TABLE IF EXISTS gift_tag');
+	    sql = "CREATE TABLE IF NOT EXISTS contact_tag ( " +
+	    "id INTEGER PRIMARY KEY, " +
+	    "contact_id INTEGER, " + 
+	    "tag_id INTEGER, " + 
+	    "modified DATETIME)";
+	    tx.executeSql(sql, null,
+		function() {
+		//console.log('CREATE contact_tag TABLE success.');
+		},
+		onError);
+		
+	//	    tx.executeSql('DROP TABLE IF EXISTS gender_gift');
+	    sql = "CREATE TABLE IF NOT EXISTS gender_gift ( " +
+	    "id INTEGER PRIMARY KEY, " +
+	    "gender_id INTEGER, " + 
+	    "gift_id INTEGER, " + 
+	    "modified DATETIME)";
+	    tx.executeSql(sql, null,
+		function() {
+		//console.log('CREATE gender_gift TABLE success.');
 		},
 		onError);
 	
@@ -78,24 +103,30 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    "modified DATETIME)";
 	    tx.executeSql(sql, null,
 		function() {
-		    console.log('CREATE userorder TABLE success.');
+		//console.log('CREATE userorder TABLE success.');
 		},
 		onError);
 	});
 		
     }
     
-	
+    /**
+    * Start the syncing of all tables with web based api.
+    **/
     this.sync = function(callback) {
 	var self = this;
-	var tables = ["gift"];
+	var tables = ["gender_gift","tag","gift_tag","gift"];
 	for(var i in tables){
 	    var table = tables[i];
-	    var syncURL = app.apiURL + 'sync/' + table;
-	    this.getLastSync(table, function(lastSync){
+	    //console.log("Table (" + i +") = " + table);
+	    //var syncURL = app.apiURL + 'sync/' + table;
+	    //console.log("Sync URL = " + syncURL);
+	    self.getLastSync(table, function(table,lastSync){
+		var syncURL = app.apiURL + 'sync/' + table;
+		//console.log("Sync URL = " + syncURL);
 		self.getChanges(syncURL, lastSync,
 		    function (changes) {
-			self.applyChanges(changes, callback);
+			self.applyChanges(table, changes, callback);
 		    });
 	    });
 	}
@@ -103,21 +134,27 @@ var WebSqlStore = function(successCallback, errorCallback) {
  
     }
 	
+    /**
+    * Look up the time of the most recent sync for a single table.
+    **/
     this.getLastSync = function(table, callback) {
 	this.db.transaction(
 	    function(tx) {
 		var sql = "SELECT MAX(modified) as lastSync FROM " + table;
-		console.log(sql);
-		tx.executeSql(sql, this.txErrorHandler,
+		//console.log(sql);
+		tx.executeSql(sql, null,
 		    function(tx, results) {
 			var lastSync = results.rows.item(0).lastSync;
-			callback(lastSync);
-		    });
+			callback(table,lastSync);
+		    },this.txErrorHandler);
 	    });
     }
 	
+    /**
+    * Call the api to get the latest changes to a single table.
+    **/
     this.getChanges = function(syncURL, since, callback) {
-	console.log(syncURL);
+	//	console.log("Sync URL = " + syncURL);
 	$.ajax({
 	    url: syncURL,
 	    data: {
@@ -128,24 +165,42 @@ var WebSqlStore = function(successCallback, errorCallback) {
 		callback(changes);
 	    },
 	    error: function(model, response) {
-		alert(response.responseText);
+	    //alert(response.responseText);
 	    }
 	});
  
     }
-	
-    this.applyChanges = function(items, callback) {
+
+    this.getImages = function(){
+	//http://community.phonegap.com/nitobi/topics/download_remote_image_display_when_not_connected_to_internet
+    }
+
+    /**
+     * Run through each json object returned and update the table on the device.
+     **/
+    this.applyChanges = function(table, items, callback) {
 	this.db.transaction(
 	    function(tx) {
 		var l = items.length;
+		var cols = '';
+		var placeholders = '';
+		var properties = [];
+		for (var key in items[0]) {
+		    cols = cols + key + ",";
+		    properties.push(key);
+		    placeholders = placeholders +  "?,";
+		}
 		var sql =
-		"INSERT OR REPLACE INTO gift (id, title, description, price, modified) " +
-		"VALUES (?, ?, ?, ?, ?)";
+		"INSERT OR REPLACE INTO " + table + " (" + cols.substring(0,cols.length - 1) + ") " +
+		"VALUES (" + placeholders.substring(0,placeholders.length - 1) + ")";
 		var item;
 		for (var i = 0; i < l; i++) {
 		    item = items[i];
-		    var params = [item.id, item.title, item.description, item.price, item.modified];
-		    tx.executeSql(sql, params,onError);
+		    var params = [];
+		    for(var p in properties){
+			params.push(item[properties[p]]);
+		    }
+		    tx.executeSql(sql, params, onError);
 		}
 	    },
 	    this.txErrorHandler,
@@ -180,6 +235,19 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    });
     };
     
+    /**
+     * Pull the upcoming events.
+     **/
+    this.findUpcomingEvents = function(callback) {
+	this.db.transaction(
+	    function(tx) {
+		var sql = "SELECT id, first_name, last_name, dob FROM contact WHERE strftime('%m-%d', dob) > strftime('%m-%d',date('now'));";
+		tx.executeSql(sql, [], function(tx, results) {
+		    callback(results.rows.length > 0 ? results.rows : null);
+		});
+	    });
+    };
+    
     
     //Gift Data Functions
     
@@ -187,6 +255,18 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	this.db.transaction(
 	    function(tx) {
 		var sql = "SELECT id, title, description, price FROM gift WHERE id > 0";
+		tx.executeSql(sql, [], function(tx, results) {
+		    callback(results.rows.length > 0 ? results.rows : null);
+		});
+	    });
+    };
+    
+    this.suggestGiftsForContact = function(contact, callback) {
+	this.db.transaction(
+	    function(tx) {
+		//Select gifts that haven't already been given and fit the contact's tags
+		var sql = "SELECT g.id, g.title, g.description, g.price FROM gift g JOIN gender_gift gg ON g.id = gg.gift_id WHERE g.id > 0";
+		console.log(sql);
 		tx.executeSql(sql, [], function(tx, results) {
 		    callback(results.rows.length > 0 ? results.rows : null);
 		});
@@ -203,29 +283,22 @@ var WebSqlStore = function(successCallback, errorCallback) {
 	    });
     };
     
-    /**
-     * Take a contact and find a suitable gift for them.
-     */
-    this.findGiftForContact = function(contact, callback){
-	
-    }
-    
     this.saveContact = function(data,callback){
 	this.db.transaction(
 	    function(tx) {
 		//console.log(data);
 		if(data[0] == 0){
 		    //console.log('INSERT');
-		    var sql = "INSERT INTO contact (first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id) VALUES (?,?,?,?,?,?,?,?)";
+		    var sql = "INSERT INTO contact (first_name, last_name, address_1, address_2, address_3, postcode, dob, relationship_id, gender_id) VALUES (?,?,?,?,?,?,?,?,?)";
 		    ;
-		    tx.executeSql(sql, [data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8]] , function() {
+		    tx.executeSql(sql, [data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8], data[9]] , function() {
 			callback();
 		    });
 		}
 		else{
 		    //console.log('UPDATE');
-		    var sql = "UPDATE contact SET first_name = ?, last_name = ?, address_1 = ?, address_2 = ?, address_3 = ?, postcode = ?, dob = ?, relationship_id = ? WHERE id = ?";
-		    tx.executeSql(sql, [data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[0]], function() {
+		    var sql = "UPDATE contact SET first_name = ?, last_name = ?, address_1 = ?, address_2 = ?, address_3 = ?, postcode = ?, dob = ?, relationship_id = ? , gender_id = ? WHERE id = ?";
+		    tx.executeSql(sql, [data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[0]], function() {
 			callback();
 		    });
 		}		
@@ -261,7 +334,7 @@ var WebSqlStore = function(successCallback, errorCallback) {
     }
     
     function onError(tx, err){
-	console.log(err.message);
+    //console.log(err.message);
     }
     
 }

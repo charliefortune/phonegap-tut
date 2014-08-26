@@ -2,6 +2,7 @@
     <head>
         <script src="css/source-sans-pro.js"></script>
         <link href="css/styles.css" rel="stylesheet">
+	<!--	<link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet">-->
 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<script src="bootstrap/js/bootstrap.min.js"></script>
     </head>
@@ -11,7 +12,7 @@
 
 	    <script id="header-banner-tpl" type="text/x-handlebars-template">
 		<div class="header-banner">
-		    <img src="/img/logo.jpg" height="200px"/>
+		    <img src="/img/banner.jpg" height="200px"/>
 		</div>
 	    </script>
 
@@ -19,28 +20,39 @@
 
 	    <script id="home-tpl" type="text/x-handlebars-template">
 		<div class='page-header text-center'>
-		    <h1>Katokuri</h1>
+		    <img src="img/banner.png" alt="Katokuri" />
 		</div>
-<!--		<div id="deviceready" class="blink">
-		    <p class="event listening">Connecting to Device</p>
-		    <p class="event received">Device is Ready</p>
-		</div>-->
-		<p class="text-center">
-		    Katokuri your longtime butler.<br />
-		    He remember for your special happy day!
-		</p>
+		<!--		<div id="deviceready" class="blink">
+				    <p class="event listening">Connecting to Device</p>
+				    <p class="event received">Device is Ready</p>
+				</div>-->
+
 		<div>
-		    <div class="text-center">
-			<a href="#contacts/" 
-			   class="btn btn-default btn-primary big-btn">Your Contacts</a>
-		    </div>
+		    <p class="text-center">Katokuri make you long-time wonderful.</p>
+
 		    <div class="text-center">
 			<a href="#gifts/" 
-			   class="btn btn-default btn-success big-btn">Gifts</a>
+			   class="btn btn-default btn-success big-btn">
+			    <img src="img/gift.png" class="icon" alt="Gifts" />
+			</a>
 		    </div>
+
+		    <div class="text-center">
+			<a href="#contacts/" 
+			   class="btn btn-default btn-primary big-btn">
+			    <img src="img/user.png" class="icon" alt="Your Contacts" />
+			</a>
+		    </div>
+
 		    <div class="text-center">
 			<a href="#account/" 
-			   class="btn btn-default big-btn">Your Account</a>
+			   class="btn btn-default big-btn">
+			    <img src="img/settings.png" class="icon-small" alt="Your Account" />
+			</a>
+		    </div>
+
+		    <div class='page-header text-center'>
+			<h3>Reminders</h3>
 		    </div>
 		</div>
 	    </script>
@@ -51,31 +63,60 @@
 
 	    <script id="contacts-tpl" type="text/x-handlebars-template">
 		<div class='page-header text-center'>
-		    <a href='/' class="btn">Back</a>
-		    <h1>Your Contacts</h1>
+		    <a href="/">
+			<img src="img/banner.png" alt="Katokuri" />
+		    </a>
 		</div>
 		<p class="text-center">Who care for? Katokuri bring smile in happiness way.</p>
 		<div>
 		    <div class="text-center">
-			<a href="#contacts/add" 
-			   class="btn btn-default btn-primary big-btn">Add A Contact</a>
+			<a href="#contacts/add/" 
+			   class="btn btn-default btn-primary big-btn">
+			    <img src="img/add_user.png" class="icon-small" alt="Add a contact" />
+			</a>
 		    </div>
 		    <div class="text-center">
 			<a href="#contacts/import" 
-			   class="btn btn-default btn-success big-btn">Import Contacts</a>
+			   class="btn btn-default btn-primary big-btn">
+			    <img src="img/contacts.png" class="icon-small" alt="Import contacts" />
+			</a>
 		    </div>
 		</div>
 		<ul class='contact-list'></ul>
 	    </script>
+
+	    <!---------- Eventlist view --------->
+
+	    <script id="event-li-tpl" type="text/x-handlebars-template">
+		{{#.}}
+		<li>
+		    <a href="#contacts/view/{{this.id}}">
+			{{this.first_name}} {{this.last_name}}<br/>
+		    </a>
+		    <div>
+			{{this.dob}}
+		    </div>
+		    <div>
+			<!-- put icons in here -->
+			{{this.gift}}
+		    </div>
+		</li>
+		{{/.}}
+	    </script>
+
 
 	    <!---------- Contactlist view --------->
 
 	    <script id="contact-li-tpl" type="text/x-handlebars-template">
 		{{#.}}
 		<li>
-		    <a href="#contacts/{{this.id}}">
+		    <a href="#contacts/view/{{this.id}}">
 			{{this.first_name}} {{this.last_name}}<br/>
 		    </a>
+		    <div class="gift-list-row">
+			<a href="#contacts/view/{{this.id}}" class="btn btn-primary left">view</a>
+			<a href="#contacts/edit/{{this.id}}" class="btn btn-success left">edit</a>
+		    </div>
 		</li>
 		{{/.}}
 	    </script>
@@ -83,10 +124,11 @@
 
 	    <!---------- Add/Edit Contact View --------->
 
-	    <script id="contact-tpl" type="text/x-handlebars-template">
+	    <script id="edit-contact-tpl" type="text/x-handlebars-template">
 		<div class='page-header text-center'>
-		    <a href='#contacts/' class="btn">Back</a>
-		    <h1>Contact</h1>
+		    <a href="#contacts/">
+			<img src="img/banner.png" alt="Katokuri" />
+		    </a>
 		</div>
 		<p class="text-center">Add and edit your contacts.</p>
 		<div>
@@ -119,9 +161,15 @@
 			    <div class="col-md-4">
 				<input type='text' name="relationship_id" class="form-control" value="{{this.relationship_id}}" placeholder="Relationship"/>
 			    </div>
+			    <div class="col-md-4">
+				<select name="gender_id" class="form-control">
+				    <option value="1">Male</option>
+				    <option value="2">Female</option>
+				</select>
+			    </div>
 			    <div class="text-center">
 				<button type="submit" id="contact-form-submit" class="btn btn-default big-btn">Save</button>
-				<button type="submit" id="contact-form-submit" class="btn btn-default big-btn">Delete</button>
+				<button type="submit" id="contact-form-delete" class="btn btn-default big-btn">Delete</button>
 			    </div>
 
 			</form>
@@ -131,194 +179,249 @@
 	    </script>
 
 
-	    <!---------- Gifts view --------->
 
-	    <script id="gifts-tpl" type="text/x-handlebars-template">
+	    <!---------- Single Contact View --------->
+
+	    <script id="contact-tpl" type="text/x-handlebars-template">
 		<div class='page-header text-center'>
-		    <a href='/' class="btn">Back</a>
-		    <h1>Gifts</h1>
-		</div>
-		<p class="text-center">View the gifts you have sent so far.</p>
-		<div>
-		    <div class="text-center">
-			<a href="#gifts/add" 
-			   class="btn btn-default btn-primary big-btn">Add A Gift</a>
-		    </div>
-		    <div class="text-center">
-			<a href="#gifts/import" 
-			   class="btn btn-default btn-success big-btn">Cancel A Gift</a>
-		    </div>
-		</div>
-		<ul class='gift-list'></ul>
-	    </script>
-	    
-
-	    <!---------- Giftlist view --------->
-
-	    <script id="gift-li-tpl" type="text/x-handlebars-template">
-		{{#.}}
-		<li>
-		    <a href="#gifts/{{this.id}}">
-			{{this.title}} <br/>
+		    <a href="#contacts/">
+			<img src="img/banner.png" alt="Katokuri" />
 		    </a>
-		    <div class="gift-list-row">
-			<a href="#gifts/{{this.id}}" class="btn btn-primary left">view</a>
-			<a href="#send/{{this.id}}" class="btn btn-success left">send</a>
-		    </div>
-		</li>
-		{{/.}}
-	    </script>
-
-	    <!---------- Gift view --------->
-
-	    <script id="gift-tpl" type="text/x-handlebars-template">
-		<div class='header'>
-		    <a href='/' class="btn left">Home</a>
-		    <h1>{{title}}</h1>
 		</div>
-		<div class='details'>
-		    <img class='contact-image' src='img/{{title}}.jpg' />
-		    <span class="description">
-			<em>
-			    {{description}}
-			</em>
-		    </span>
-		    <br />
-		    <span class="price">
-			&pound;{{price}}
-		    </span>
-		    <br />		    
-		    <div class=" text-center">
-			<div class="right">
-			    <a href='#contact/' class="btn btn-default btn-primary big-btn">Nope</a>
+		<p class="text-center">
+		<h2 class="text-center">
+		    {{this.first_name}} {{this.last_name}}
+		</h2>
+		<div class="col-md-4"></div>
+		<div class="col-md-8">
+		    {{this.address_1}}
+		</div>
+		<div class="col-md-4"></div>
+		<div class="col-md-8">
+		    {{this.address_2}}
+		</div>
+		<div class="col-md-4"></div>
+		<div class="col-md-8">
+		    {{this.address_3}}
+		</div>
+		<div class="col-md-4"></div>
+		<div class="col-md-8">
+		    {{this.postcode}}
+		</div>
+		<div class="col-md-4"></div>
+		<div class="col-md-8">
+		    {{this.dob}}
+		</div>
+	    </p>
+	    <div>
+		<div class="text-center">
+		    <a href="#gifts/contact/{{this.id}}" 
+		       type="submit" logo
+		       id="contact-form-gift" 
+		       class="btn btn-primary big-btn">Choose a gift</a>
+		    <a href="#contacts/edit/{{this.id}}"
+		       class="btn btn-success big-btn">Edit</a>
+<!--		    <a type="submit" 
+		       id="contact-form-delete" 
+		       class="btn btn-danger big-btn">Delete</a>-->
+		</div>
+
+
+	    </div>
+	</script>
+
+
+
+	<!---------- Gifts view --------->
+
+	<script id="gifts-tpl" type="text/x-handlebars-template">
+	    <div class='page-header text-center'>
+		<a href="/">
+		    <img src="img/banner.png" alt="Katokuri" />
+		</a>
+	    </div>
+	    <p class="text-center">View the gifts you have sent so far.</p>
+	    <div>
+		<div class="text-center">
+		    <a href="#gifts/add" 
+		       class="btn btn-default btn-primary big-btn">Add A Gift</a>
+		</div>
+		<div class="text-center">
+		    <a href="#gifts/import" 
+		       class="btn btn-default btn-success big-btn">Cancel A Gift</a>
+		</div>
+	    </div>
+	    <ul class='gift-list'></ul>
+	</script>
+
+
+	<!---------- Giftlist view --------->
+
+	<script id="gift-li-tpl" type="text/x-handlebars-template">
+	    {{#.}}
+	    <li>
+		<a href="#gifts/{{this.id}}/">
+		    {{this.title}} <br/>
+		</a>
+		<div class="gift-list-row">
+		    <a href="#gifts/{{this.id}}/" class="btn btn-primary left">view</a>
+		    <a href="#send/{{this.id}}/" class="btn btn-success left">send</a>
+		</div>
+	    </li>
+	    {{/.}}
+	</script>
+
+	<!---------- Gift view --------->
+
+	<script id="gift-tpl" type="text/x-handlebars-template">
+	    <div class='header'>
+		<a href='/' class="btn left">Home</a>
+		<h1>{{title}}</h1>
+	    </div>
+	    <div class='details'>
+		<img class='contact-image' src='img/{{title}}.jpg' />
+		<span class="description">
+		    <em>
+			{{description}}
+		    </em>
+		</span>
+		<br />
+		<span class="price">
+		    &pound;{{price}}
+		</span>
+		<br />		    
+		<div class=" text-center">
+		    <div class="right">
+			<a href='#contact/' class="btn btn-default btn-primary big-btn">Nope</a>
+		    </div>
+		    <div class="right">
+			<a href='#send' class="btn btn-default btn-success big-btn">Send this!</a>
+		    </div>
+		</div>
+	    </div>
+	</script>
+
+	<!---------- Account view --------->
+
+	<script id="home-tpl" type="text/x-handlebars-template">
+	    <div class='page-header text-center'>
+		<h1>MyPA - Account Details</h1>
+	    </div>
+	    <div>
+		<div class="text-center">
+		    <a href="#contact/add" 
+		       class="btn btn-default btn-primary big-btn">My contacts</a>
+		</div>
+		<div class="text-center">
+		    <a href="#contact/add" 
+		       class="btn btn-default btn-success big-btn">My gifts</a>
+		</div>
+		<div class="text-center">
+		    <a href="#contact/add" 
+		       class="btn btn-default big-btn">Back</a>
+		</div>
+	    </div>
+
+	</script>
+
+
+
+
+
+
+
+	<!---------- Contactlist view --------->
+
+	<!--	    <script id="contact-li-tpl" type="text/x-handlebars-template">
+			{{#.}}
+			<li>
+			    <a href="#contact/{{this.id}}">
+				{{this.displayName}} <br/>
+			    </a>
+			</li>
+			{{/.}}
+		    </script>-->
+
+	<!---------- Old Contact view --------->
+
+	<!--	    <script id="contact-tpl" type="text/x-handlebars-template">
+			<div class='header text-center'>
+			    <a href='#' 
+			       class="btn left">Back</a>
+			    <h1>{{displayName}}</h1>
 			</div>
-			<div class="right">
-			    <a href='#send' class="btn btn-default btn-success big-btn">Send this!</a>
+			<div>
+			    <form class="contact-form">
+							<img class='contact-image' src='img/{{displayName}}.jpg' />
+				<h2>{{title}}</h2>
+				<span class="address">
+				</span>
+	
+				<div>
+				    <label for='dob' class="span2">D.O.B.</label>
+				    <input type='date' 
+					   id='dob' 
+					   value='{{dateOfBirth}}' class="left"/>
+				</div>
+				<div class="clearfix"></div>
+				<div class="">
+				    <input type='radio' 
+					   name='gender' 
+					   value='m' />Male
+				    <input type='radio' 
+					   name='gender' 
+					   value='f' />Female
+				</div>
+	
+	
+							<div class="text-center">
+							    <a href='#send' 
+							       class="button send-msg btn-primary btn-large">Send Gift</a>
+							</div>
+			    </form>
 			</div>
-		    </div>
-		</div>
-	    </script>
+		    </script>-->
 
-	    <!---------- Account view --------->
+	<!---------- Welcome view --------->
 
-	    <script id="home-tpl" type="text/x-handlebars-template">
-		<div class='page-header text-center'>
-		    <h1>MyPA - Account Details</h1>
-		</div>
-		<div>
-		    <div class="text-center">
-			<a href="#contact/add" 
-			   class="btn btn-default btn-primary big-btn">My contacts</a>
-		    </div>
-		    <div class="text-center">
-			<a href="#contact/add" 
-			   class="btn btn-default btn-success big-btn">My gifts</a>
-		    </div>
-		    <div class="text-center">
-			<a href="#contact/add" 
-			   class="btn btn-default big-btn">Back</a>
-		    </div>
-		</div>
-
-	    </script>
-
+	<!--	    <script id="welcome-tpl" type="text/x-handlebars-template">
+			<div class='page-header text-center'>
+			    <h1>MyPA</h1>
+			</div>
+			<p>
+			    Welcome to GiftPal.
+			    Don't ever forget again!
+			</p>
+			<div>
+			    <a href="#contacts/" class="btn btn-primary">My contacts</a>
+			    <a href="#contact/add" class="btn btn-primary">My gifts</a>
+			</div>
+					<p class=" text-center">
+					    Who are you 'too busy' to buy a present for?
+					</p>
+					<div class='search-bar text-center'>
+					    <input class='search-key' type="search"/>
+					</div>
+					<ul class='contact-list'></ul>
+					   
+		    </script>-->
 
 
 
-
-
-
-	    <!---------- Contactlist view --------->
-
-	    <!--	    <script id="contact-li-tpl" type="text/x-handlebars-template">
-			    {{#.}}
-			    <li>
-				<a href="#contact/{{this.id}}">
-				    {{this.displayName}} <br/>
-				</a>
-			    </li>
-			    {{/.}}
-			</script>-->
-
-	    <!---------- Old Contact view --------->
-
-	    <!--	    <script id="contact-tpl" type="text/x-handlebars-template">
-			    <div class='header text-center'>
-				<a href='#' 
-				   class="btn left">Back</a>
-				<h1>{{displayName}}</h1>
-			    </div>
-			    <div>
-				<form class="contact-form">
-							    <img class='contact-image' src='img/{{displayName}}.jpg' />
-				    <h2>{{title}}</h2>
-				    <span class="address">
-				    </span>
-	    
-				    <div>
-					<label for='dob' class="span2">D.O.B.</label>
-					<input type='date' 
-					       id='dob' 
-					       value='{{dateOfBirth}}' class="left"/>
-				    </div>
-				    <div class="clearfix"></div>
-				    <div class="">
-					<input type='radio' 
-					       name='gender' 
-					       value='m' />Male
-					<input type='radio' 
-					       name='gender' 
-					       value='f' />Female
-				    </div>
-	    
-	    
-							    <div class="text-center">
-								<a href='#send' 
-								   class="button send-msg btn-primary btn-large">Send Gift</a>
-							    </div>
-				</form>
-			    </div>
-			</script>-->
-
-	    <!---------- Welcome view --------->
-
-	    <!--	    <script id="welcome-tpl" type="text/x-handlebars-template">
-			    <div class='page-header text-center'>
-				<h1>MyPA</h1>
-			    </div>
-			    <p>
-				Welcome to GiftPal.
-				Don't ever forget again!
-			    </p>
-			    <div>
-				<a href="#contacts/" class="btn btn-primary">My contacts</a>
-				<a href="#contact/add" class="btn btn-primary">My gifts</a>
-			    </div>
-					    <p class=" text-center">
-						Who are you 'too busy' to buy a present for?
-					    </p>
-					    <div class='search-bar text-center'>
-						<input class='search-key' type="search"/>
-					    </div>
-					    <ul class='contact-list'></ul>
-					       
-			</script>-->
-
-
-
-	    <script src="phonegap.js"></script>
-	    <script src="lib/handlebars.js"></script>
-	    <script src="lib/jquery-1.8.2.min.js"></script>
-	    <script src="js/storage/websql-store.js"></script>
-	    <!--        <script src="js/storage/contact-store.js"></script>-->
-	    <script src="js/HomeView.js"></script>
-	    <script src="js/ContactsView.js"></script>
-	    <script src="js/ContactView.js"></script>
-	    <script src="js/GiftsView.js"></script>
-	    <script src="js/GiftView.js"></script>
-	    <script src="js/main.js"></script>
-	</div>
-    </body>
+	<script src="phonegap.js"></script>
+	<script src="lib/handlebars.js"></script>
+	<script src="lib/jquery-1.9.1.min.js"></script>
+	<script src="js/storage/websql-store.js"></script>
+	<!--        <script src="js/storage/contact-store.js"></script>-->
+	<script src="js/HomeView.js"></script>
+	<script src="js/ContactsView.js"></script>
+	<script src="js/EditContactView.js"></script>
+	<script src="js/ContactView.js"></script>
+	<script src="js/GiftsView.js"></script>
+	<script src="js/GiftView.js"></script>
+	<script src="js/main.js"></script>
+    </div>
+</body>
 </html>
 
 
